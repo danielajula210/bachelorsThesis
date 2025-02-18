@@ -1,0 +1,124 @@
+.loginContainer {
+    height: 100vh;
+    width: 100vw;
+    background-color: #f0e6f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login {
+    height: 70%;
+    width: 70%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.upLogin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logoLogin {
+    font-size: 40px;
+    font-weight: bold;
+    color: #8a2be2;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.message {
+    font-size: 18px;
+    font-weight: 500;
+    color: #5c139f;
+    text-align: center;
+}
+
+.lowLogin {
+    width: 100%;
+    max-width: 400px;
+}
+
+.loginProcess {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.email, .pass {
+    font-size: 16px;
+    height: 50px;
+    width: 92%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.email:focus, .pass:focus {
+    border-color: #8a2be2;
+}
+
+.buttonLogin {
+    height: 50px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    background-color: #00da4c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttonLogin:hover {
+    background-color: #00b140;
+}
+
+.forgotPassword {
+    text-align: center;
+    color: #00da4c;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.forgotPassword:hover {
+    color: #00b140;
+}
+
+.newAccount {
+    height: 50px;
+    width: 60%;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    background-color: #76e5f4;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.registrationLink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+
+.newAccount:hover {
+    background-color: #5cc2d1;
+}

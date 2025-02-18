@@ -1,0 +1,100 @@
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.tbarContainer{
+    height: 50px;
+    width: 100%;
+    background-color:	#bf9cfc;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top:0;
+}
+
+.logo{
+    font-size: 24px;
+    font-weight: bold;
+    color:blueviolet;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.leftTopbar{
+    flex:5;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon{
+    font-size: 20px !important;
+    margin-left: 10px;
+}
+
+.searchInput{
+    border: none;
+    width: 30%;
+}
+
+.searchInput:focus{
+    outline: none;
+}
+
+.searchBar{
+    height: 30px;
+    width: 50%;
+    background-color: white;
+    display: flex;
+    border-radius: 30px;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.rightTopbar{
+    flex:4;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.homeLink{
+    cursor: pointer;
+    margin-left: 60px;
+    margin-top: 10px;
+}
+
+.iconList{
+    display: flex;
+}
+
+.icons{
+    margin-top: 10px;
+    margin-right: 15px;
+    cursor: pointer;
+    position: relative;
+}
+
+.item{
+    width: 15px;
+    height: 15px;
+    background-color: pink;
+    border-radius: 50%;
+    color:white;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.profileImg{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}

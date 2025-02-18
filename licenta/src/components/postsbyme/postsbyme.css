@@ -1,0 +1,103 @@
+.postByMe{
+    width: 100%;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    -moz-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.postByMeContainer{
+    padding: 10px;
+}
+
+.upPart{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftUpPart{
+    display: flex;
+    align-items: center;
+}
+
+.profileImgInMyPost{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.usernameInMyPost{
+    font-size:15px;
+    font-weight: 500;
+    margin-top:0;
+    margin-bottom: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.dateInMyPost{
+    font-size: 12px;
+}
+
+.middlePart{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.photoInMyPost{
+    max-height: 500px;
+    width: 100%;
+    margin-top: 20px;
+    object-fit: contain;
+}
+
+.lowPart{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftLowPart{
+    display: flex;
+    align-items: center;
+}
+
+.like{
+    height: 24px;
+    width: 24px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.dislike{
+    height: 24px;
+    width: 24px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.mycounter{
+    font-size: 15px;
+}
+
+.mycomment{
+    font-size: 15px;
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-bottom-color: gray;
+    cursor: pointer;
+}
+
+.rightUpPart{
+    cursor: pointer;
+}

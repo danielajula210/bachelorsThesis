@@ -1,0 +1,86 @@
+.postMaker{
+    height: 170px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    -moz-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+}
+
+.postMakerContainer{
+    padding: 10px;
+    align-items: center;
+}
+
+.upperPart{
+    display:flex;
+    align-items: center;
+}
+
+.postMakerProfileImg{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.text{
+    width: 80%;
+    border: none;
+}
+
+.text:focus{
+    outline: none;
+}
+
+.downpartSeparater{
+    margin: 20px;
+}
+
+.downPart{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.postingMakerOptions{
+    display: flex;
+    margin-left: 20px;
+}
+
+.postMakerOption{
+    display:flex;
+    align-items: center;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.photoIcon{
+    font-style: 18px;
+    margin-right: 3px;
+}
+.emojiIcon{
+    font-style: 18px;
+    margin-right: 3px;
+}
+
+.photoText{
+    font-size: 14px;
+    font-weight: 500;
+}
+.emojiText{
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.postMakerButton{
+    border: none;
+    padding: 7px;
+    border-radius:5px;
+    background-color: #90EE90;
+    margin-right: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
