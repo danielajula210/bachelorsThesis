@@ -39,6 +39,10 @@ const UserSchema= new mongoose.Schema({
         type: Array,
         default: []
     },
+    description:{
+        type: String,
+        max: 100
+    }, 
     theAdmin:{
         type: Boolean,
         default: false

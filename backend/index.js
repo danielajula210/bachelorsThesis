@@ -5,7 +5,7 @@ const helmet=require("helmet");
 const morgan=require("morgan");
 const mongoose = require('mongoose');
 const dotenv=require("dotenv");
-const userRoute = require("./routers/users")
+const userRoute = require("./routers/usersRoute")
 const registerRoute = require("./routers/authentificationRoute")
 
 dotenv.config();
@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-app.use("/api/users", userRoute)
+app.use("/api/usersRoute", userRoute)
 app.use("/api/authentificationRoute", registerRoute)
 
 
