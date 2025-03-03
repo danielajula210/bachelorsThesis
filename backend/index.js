@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const dotenv=require("dotenv");
 const userRoute = require("./routers/usersRoute")
 const registerRoute = require("./routers/authentificationRoute")
+const postsRoute=require("./routers/postsRoute")
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use(morgan("common"));
 
 app.use("/api/usersRoute", userRoute)
 app.use("/api/authentificationRoute", registerRoute)
+app.use("/api/postsRoute",postsRoute)
 
 
 
