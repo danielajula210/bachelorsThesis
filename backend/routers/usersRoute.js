@@ -2,10 +2,6 @@ const router = require("express").Router();
 const userModel=require("../models/usersModel");
 const bcrypt=require("bcrypt");
 
-router.get("/",(request,response)=>{
-    response.send("Hello from user route")
-})
-
 router.put("/:id",async(request,response)=>{
     if(request.body.userId === request.params.id || request.body.theAdmin){
         if(request.body.password){
