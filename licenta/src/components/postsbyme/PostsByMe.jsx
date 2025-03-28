@@ -3,8 +3,6 @@ import {useState} from 'react'
 
 import "./postsbyme.css"
 
-import {MyPosts} from "../../postsFile"
-
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';

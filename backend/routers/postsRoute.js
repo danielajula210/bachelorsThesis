@@ -3,6 +3,7 @@ const router=require("express").Router();
 const postModel=require("../models/postsModel")
 const userModel=require("../models/usersModel")
 
+//create post
 router.post("/",async(request,response)=>{
     const creatingPost=new postModel(request.body);
     try{
@@ -14,6 +15,7 @@ router.post("/",async(request,response)=>{
     }
 });
 
+//delete
 router.delete("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -28,6 +30,8 @@ router.delete("/:id",async(request,response)=>{
     }
 });
 
+
+//get a post
 router.get("/:id",async(request,response)=>{
     try{
         const findPost=await postModel.findById(request.params.id);
@@ -38,21 +42,37 @@ router.get("/:id",async(request,response)=>{
     }
 });
 
-router.get("/gettingposts/feed",async(request,response)=>{
+//get all posts
+router.get("/gettingposts/:userId",async(request,response)=>{
     try{
-        const user=await userModel.findById(request.body.userId);
+        const user=await userModel.findById(request.params.userId);
         const thisuserspost=await postModel.find({userId:user._id});
         const friendsposts=await Promise.all(
             user.friends.map((friendId)=>{
                 return postModel.find({userId:friendId});
             })
         );
-        response.json(thisuserspost.concat(...friendsposts))
+        response.status(200).json(thisuserspost.concat(...friendsposts))
     }catch(error){
         response.status(500).json(error);
     }
 });
 
+//MyProfile posts
+router.get("/gettingprofileposts/:userId",async(request,response)=>{
+    const { userId } = request.params;
+    console.log("USER ID:",userId);
+    try {
+      const posts = await postModel.find({ userId: userId });
+      response.json(posts);
+      console.log()
+    } catch (err) {
+      response.status(500).send('Error fetching posts');
+    }
+});
+
+
+//update
 router.put("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -67,6 +87,8 @@ router.put("/:id",async(request,response)=>{
     } 
 });
 
+
+//like a post
 router.put("/:id/liking",async(request,response)=>{
     try{
         const likedPost=await postModel.findById(request.params.id);
@@ -82,6 +104,7 @@ router.put("/:id/liking",async(request,response)=>{
     }
 });
 
+//dislike a post
 router.put("/:id/disliking",async(request,response)=>{
     try{
         const dislikedPost=await postModel.findById(request.params.id);

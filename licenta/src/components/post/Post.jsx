@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import "./post.css"
+import React, { useState, useEffect } from "react";
+import {Link} from 'react-router-dom'
+import axios from 'axios'
+import {format} from "timeago.js"
 
-import {Users} from "../../postsFile"
+import "./post.css"
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -9,22 +11,35 @@ import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 
 
 export default function Post({post}) {
-    const [like,setLike]=useState(post.likes)
-    const [liked,setLiked]=useState(false)
+    const FLDR = process.env.REACT_APP_POSTS_FOLDER;
+
+    const [like,setLike]=useState(post.likes);
+    const [liked,setLiked]=useState(false);
+
+    const [user,setUsers]=useState({});
+
 
     const likesHandler = () => {
         setLike((oldLikes) => (liked ? oldLikes-1 : oldLikes+1));
         setLiked(!liked);
     };
 
+    useEffect(()=>{
+        const fetchUsers= async () =>{
+            const response=await axios.get(`/usersRoute?userId=${post.userId}`);
+            setUsers(response.data);
+        };
+        fetchUsers();
+    },[post.userId]);
+
     return (
         <div className="post">
             <div className='postContainer'>
                 <div className="upPart">
                     <div className="leftUpPart">
-                        <img className="profileImgInPost"src={Users.filter( (u)=>u.id===post.userId)[0].prPicture } alt="img" />
-                        <span className="usernameInPost">{Users.filter( (u)=>u.id===post.userId)[0].username }</span>
-                        <span className="dateInPost">{post.time}</span>
+                        <Link to={`MyProfile`}><img className="profileImgInPost"src={user.profileImage || FLDR+"users/u1.jpg"} alt="img" /></Link>
+                        <span className="usernameInPost">{user.firstname} {user.lastname}</span>
+                        <span className="dateInPost">{format(post.createdAt)}</span>
                     </div>
 
                     <div className="rightUpPart">
@@ -34,7 +49,7 @@ export default function Post({post}) {
 
                 <div className="middlePart">
                     <span className='description'>{post?.description}</span>
-                    <img className="photo"src={post.image} alt="img" />
+                    <img className="photo"src={FLDR+post.postImage} alt="img" />
                 </div>
 
                 <div className="lowPart">

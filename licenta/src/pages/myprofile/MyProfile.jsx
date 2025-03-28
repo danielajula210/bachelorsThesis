@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 import "./myprofile.css"
 
 import Tbar from '../../components/tbar/Tbar'
 import PostsByMe from '../../components/postsbyme/PostsByMe'
+import Postmaker from '../../components/postmaker/Postmaker'
+import Post from '../../components/post/Post'
 
 import {MyPosts} from "../../postsFile"
 
@@ -12,23 +15,56 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
 export default function MyProfile() {
+  const FLDR = process.env.REACT_APP_POSTS_FOLDER;
+  const [user,setUsers]=useState({});
+  const [myPosts, setMyPosts] = useState([]); 
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`/usersRoute?userId=67b6216dac13e65be5017f3c`);
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+  
+    fetchUser();
+  }, []);
+  
+  useEffect(() => {
+    if (user._id) {  
+      const fetchMyPosts = async () => {
+        try {
+          const response = await axios.get(`/postsRoute/gettingprofileposts/${user._id}`); 
+          setMyPosts(response.data); 
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
+      };
+
+      fetchMyPosts();
+    }
+  }, [user._id]);
+
+
   return (
     <>
     <div className="tBar"><Tbar/></div>
     <div className="myProfilePageContainer">
       <div className="background">
         <div className="upperProfile">
-          <img className="myCoverImg" src="./assets/cover.jpg"></img>
+          <img className="myCoverImg" src={`${FLDR}cover.jpg`} alt=""></img>
           <div className="myProfileContainer">
-            <img className="myProfileImg" src="./assets/users/me.jpg"></img>
-            <span className="myName">Cornelia Jurca</span>
+            <img className="myProfileImg" src="./assets/users/me.jpg" alt=""></img>
+            <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
         </div>
       </div>
       
       <div className="lowProfile">
         <div className="myPosts">
-            {MyPosts.map((post) => (<PostsByMe key={post.id} mypost={post} />))}
+                {myPosts.map( (p) => (<Post key={p._id} post={p}/>) )} 
         </div>
 
 
@@ -42,7 +78,7 @@ export default function MyProfile() {
                 <MoreHorizIcon/>
               </div>
             </div>
-            <span className='text'>Vă doresc o zi bună tuturor</span>
+            <span className='text'>{user.description}</span>
           </div>
 
           <div className="oldPhotosContainer">

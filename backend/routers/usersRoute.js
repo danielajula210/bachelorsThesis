@@ -19,7 +19,7 @@ router.put("/:id",async(request,response)=>{
             return response.status(500).json(error);
         }
     }else{
-        return response.status(402).json("Impossible update")
+        return response.status(403).json("Impossible update")
     }
 });
 
@@ -32,13 +32,18 @@ router.delete("/:id",async(request,response)=>{
             return response.status(500).json(error);
         }
     }else{
-        return response.status(402).json("Impossible delete");
+        return response.status(403).json("Impossible delete");
     }
 });
 
-router.get("/:id",async(request,response)=>{
+router.get("/",async(request,response)=>{
+    const userId = request.query.userId;
+    const lastName = request.query.lastName;
+    const firstName= request.query.firstName;
     try{
-        const finduser=await userModel.findById(request.params.id);
+        const finduser= userId? 
+        await userModel.findById(userId):
+        await userModel.findOne({lastname:lastName,firstname:firstName});
         const {theAdmin,password, updatedAt, createdAt, ...other}=finduser._doc;
         response.status(200).json(other)
     }catch(error){
@@ -55,7 +60,7 @@ router.put("/:id/friends",async(request, response)=>{
             await friend2.updateOne({$push:{friends:request.params.id}});
             response.status(200).json("you are friends now");
         }else{
-            response.status(402).json("Already friends");
+            response.status(403).json("Already friends");
         }
     }catch(error){
         response.status(500).json(error);
@@ -71,7 +76,7 @@ router.put("/:id/unfriend",async(request, response)=>{
             await friend2.updateOne({$pull:{friends:request.params.id}});
             response.status(200).json("You aren't friends anymore");
         }else{
-            response.status(402).json("Already unfriend");
+            response.status(403).json("Already unfriend");
         }
     }catch(error){
         response.status(500).json(error);
