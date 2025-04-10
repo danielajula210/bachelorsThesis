@@ -83,4 +83,21 @@ router.put("/:id/unfriend",async(request, response)=>{
     }
 });
 
+router.get("/getFriends/:userId", async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId);
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const friends = await userModel.find({ _id: { $in: user.friends } }).select("firstname lastname profileImage");
+    
+        res.status(200).json(friends);
+    } catch (error) {
+        console.error("Error fetching friends:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 module.exports = router

@@ -35,8 +35,7 @@ export default function Registration() {
                 navigate("/login")
             }catch(error){
                 console.log(error);
-            }
-           
+            }    
         }
     };
 

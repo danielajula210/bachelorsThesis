@@ -1,23 +1,23 @@
-import {React, useState, useEffect} from 'react'
+import {React, useState, useEffect,useContext} from 'react'
 import axios from 'axios'
 
 import "./activity.css"
 
 import Postmaker from '../postmaker/Postmaker'
 import Post from '../post/Post'
+import {RegistrationContext} from "../../context/RegistrationContext"
 
 export default function Activity({userId}) {
   const[posts, setPosts]= useState([]);
+  const{user}=useContext(RegistrationContext);
 
   useEffect(()=>{
-    const fetchPosts= async()=>{
-      const response = userId 
-      ? await axios.get(`/postsRoute/gettingprofileposts/${userId}`)
-      : await axios.get("/postsRoute/gettingposts/67b642f93202c0b7f2287fbc")
-      setPosts(response.data)
+    const fetchPosts = async () => {
+      const response = await axios.get("/postsRoute/gettingposts/" + user._id);
+      setPosts(response.data);
     };
     fetchPosts();
-  },[userId]);
+  }, [user]);
 
   return (
     <div className='activity'>

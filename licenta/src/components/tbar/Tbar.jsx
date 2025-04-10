@@ -1,6 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { Link } from 'react-router-dom';
+
 
 import "./tbar.css"
+
+import {RegistrationContext} from "../../context/RegistrationContext";
 
 import {Search, Person, CircleNotifications} from '@mui/icons-material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -8,14 +12,14 @@ import AppsIcon from '@mui/icons-material/Apps';
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import { Link } from 'react-router-dom';
-
 
 export default function Tbar() {  
     const FLDR = process.env.REACT_APP_POSTS_FOLDER;
     const [open, setOpen] = useState(false);
-    const [user,setUsers]=useState({});
+    //const [user,setUsers]=useState({});
     const menuRef = useRef(null);
+
+    const {user}=useContext(RegistrationContext);
 
   
     const toggleMenu = () => {
@@ -62,8 +66,8 @@ export default function Tbar() {
 
           
           <div className='moreAndProfile'>
-            <Link to="/myprofile">
-                <img src={user.profileImage || FLDR+"users/defaultProfileImage.png"} alt="" className="profileImg" />
+            <Link to='/myprofile'>
+                <img src={user.profileImage ? FLDR+user.profileImage: FLDR+"users/defaultProfileImage.png"} alt="" className="profileImg" />
             </Link>
             <div className="moreIconContainer" ref={menuRef}>
               <div className="moreIcon" onClick={toggleMenu}>

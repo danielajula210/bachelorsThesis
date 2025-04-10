@@ -43,17 +43,16 @@ router.get("/:id",async(request,response)=>{
 });
 
 //get all posts
-router.get("/gettingposts/:userId",async(request,response)=>{
-    try{
-        const user=await userModel.findById(request.params.userId);
-        const thisuserspost=await postModel.find({userId:user._id});
-        const friendsposts=await Promise.all(
-            user.friends.map((friendId)=>{
-                return postModel.find({userId:friendId});
+router.get("/gettingposts/:userId", async (request, response) => {
+    try {
+        const user = await userModel.findById(request.params.userId);
+        const friendsposts = await Promise.all(
+            user.friends.map((friendId) => {
+                return postModel.find({ userId: friendId });
             })
         );
-        response.status(200).json(thisuserspost.concat(...friendsposts))
-    }catch(error){
+        response.status(200).json(friendsposts.flat());
+    } catch (error) {
         response.status(500).json(error);
     }
 });

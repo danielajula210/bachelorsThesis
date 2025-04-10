@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useContext } from 'react'
 import axios from 'axios'
 
 import "./myprofile.css"
 
 import Tbar from '../../components/tbar/Tbar'
 import Post from '../../components/post/Post'
+import { RegistrationContext } from '../../context/RegistrationContext'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -13,12 +14,14 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 export default function MyProfile() {
   const FLDR = process.env.REACT_APP_POSTS_FOLDER;
   const [user,setUsers]=useState({});
+  const {user:loggedInUser}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
+  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`/usersRoute?userId=67b6216dac13e65be5017f3c`);
+        const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -41,6 +44,21 @@ export default function MyProfile() {
       };
 
       fetchMyPosts();
+    }
+  }, [user._id]);
+
+  useEffect(() => {
+    if (user._id) {
+      const fetchFriends = async () => {
+        try {
+          const response = await axios.get(`/usersRoute/getFriends/${user._id}`);
+          setFriends(response.data); 
+        } catch (error) {
+          console.error("Error fetching friends:", error);
+        }
+      };
+  
+      fetchFriends();
     }
   }, [user._id]);
 
@@ -104,26 +122,15 @@ export default function MyProfile() {
             </div>
             
             <div className="lowFriendsList">
-              <div className="friends">
-                <img src="./assets/users/u1.jpg" className='friendPhoto' alt="img" />
-                <span className="friendName">Alina Caragea</span>
-              </div>
-
-              <div className="friends">
-                <img src="./assets/users/u2.jpg" className='friendPhoto' alt="img" />
-                <span className="friendName">Bianca Gligor</span>
-              </div>
-
-              <div className="friends">
-                <img src="./assets/users/u3.jpg" className='friendPhoto' alt="img" />
-                <span className="friendName">Ioan Mihai</span>
-              </div>
+                {friends.map((friend) => (
+                  <div className="friends" key={friend._id}>
+                    <img src={friend.profileImage || FLDR + "users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
+                    <span className="friendName">{friend.lastname} {friend.firstname}</span>
+                  </div>
+                ))}
             </div>
 
           </div>
-
-          
-
         </div>
 
       </div>
