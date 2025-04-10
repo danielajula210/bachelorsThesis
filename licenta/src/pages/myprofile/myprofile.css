@@ -1,4 +1,4 @@
-.tBar{
+.tBar {
     height: 3.125rem;
     width: 100%;
     background-color: #bf9cfc;
@@ -9,231 +9,388 @@
     z-index: 1000;
 }
 
-.background{
-    height: 590px;
+.background {
+    height: 36.875rem;
     background-color: white;
-    -webkit-box-shadow: 0px 7px 10px -6px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 7px 10px -6px rgba(0,0,0,0.75);
-    box-shadow: 0px 7px 10px -6px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0rem 0.4375rem 0.625rem -0.375rem rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0rem 0.4375rem 0.625rem -0.375rem rgba(0, 0, 0, 0.75);
+    box-shadow: 0rem 0.4375rem 0.625rem -0.375rem rgba(0, 0, 0, 0.75);
 }
+
 .upperProfile {
     display: flex;
     flex-direction: column;
-    margin-bottom: 150px;
-    margin-left: 150px;
-    margin-right: 150px;
+    margin-bottom: 9.375rem;
+    margin-left: 9.375rem;
+    margin-right: 9.375rem;
     position: relative;
-    border-radius: 20px;
+    border-radius: 1.25rem;
 }
 
 .myCoverImg {
-    max-height: 430px;
+    max-height: 26.875rem;
     width: 100%;
     object-fit: cover;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 1.25rem 1.25rem;
     cursor: pointer;
 }
 
-.myProfileContainer{
+.myProfileContainer {
     display: flex;
     flex-direction: column;
-    bottom: -50px;
-    left: 20px;
+    bottom: -3.125rem;
+    left: 1.25rem;
     align-items: center;
     justify-content: center;
 }
 
 .myProfileImg {
-    width: 150px;
-    height: 150px;
+    width: 9.375rem;
+    height: 9.375rem;
     border-radius: 50%;
-    margin-top: -100px;
+    margin-top: -6.25rem;
     object-fit: cover;
-    border: 2px solid white;
+    border: 0.125rem solid white;
     cursor: pointer;
     position: absolute;
 }
 
 .myName {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #333;
-    margin-top: 80px;
+    margin-top: 5rem;
 }
 
-.lowProfile{
+.lowProfile {
     display: flex;
     justify-content: center;
 }
 
-.myPosts{
-    margin-right: 170px;
-    width: 500px;
+.myPosts {
+    margin-right: 10.625rem;
+    width: 31.25rem;
 }
 
-.rightLowProfile{
-    width: 500px;
+.rightLowProfile {
+    width: 31.25rem;
     display: flex;
     flex-direction: column;
 }
 
-.friendsList{
+.friendsList {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: 20px;
-    margin-left: 20px;
-    border-radius: 10px;
-    padding: 10px;
-    -webkit-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    -moz-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+    border-radius: 0.625rem;
+    padding: 0.625rem;
+    -webkit-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    -moz-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
 }
 
-.upFriendsList{
+.upFriendsList {
     display: flex;
     justify-content: space-between;
     position: relative;
     align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #dddddd;
+    padding-bottom: 0.625rem;
+    border-bottom: 0.125rem solid #dddddd;
 }
 
-.allFriends,.oldtitle {
-    flex: 1; 
-    font-size: 16px;
+.allFriends, .oldtitle {
+    flex: 1;
+    font-size: 1rem;
     font-weight: bold;
     color: #333;
 }
 
-.seeAllFriends,.seeAllOldPosts {
-    font-size: 14px;
+.seeAllFriends, .seeAllOldPosts {
+    font-size: 0.875rem;
     color: #007bff;
     cursor: pointer;
 }
 
-.allFriendsNumber,.allOldPostNumber {
-    font-size: 14px;
+.allFriendsNumber, .allOldPostNumber {
+    font-size: 0.875rem;
     color: #888;
-    margin-left: 2px;
+    margin-left: 0.125rem;
 }
 
-.lowFriendsList,.lowOldPhotosContainer{
+.lowFriendsList, .lowOldPhotosContainer {
     display: flex;
-    flex-direction: center;
     justify-content: space-around;
-    margin-top: 10px;
+    margin-top: 0.625rem;
     cursor: pointer;
 }
 
-.friends{
+.friends {
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-right: 0.625rem;
+    margin-top: 0.625rem;
     cursor: pointer;
 }
 
-.friendPhoto{
-    height: 120px;
-    width: 120px;
-    border-radius: 10px;
+.friendPhoto {
+    height: 7.5rem;
+    width: 7.5rem;
+    border-radius: 0.625rem;
     object-fit: cover;
 }
 
 .friendName {
-    margin-top: 2px;
-    font-size: 14px;
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
     color: #333;
-    margin-left: 17px;
+    margin-left: 1.0625rem;
 }
 
-.descriptionMyProfile{
+.descriptionMyProfile {
     display: flex;
     flex-direction: column;
     justify-items: center;
-    margin-top: 30px;
-    margin-left: 20px;
-    border-radius: 10px;
-    padding: 10px;
-    -webkit-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    -moz-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
+    margin-top: 1.875rem;
+    margin-left: 1.25rem;
+    border-radius: 0.625rem;
+    padding: 0.625rem;
+    -webkit-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    -moz-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
 }
 
-.upDescription{
+.upDescription {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #dddddd;
+    padding-bottom: 0.3125rem;
+    border-bottom: 0.125rem solid #dddddd;
 }
 
-.title{
-    flex: 1; 
-    font-size: 16px;
+.title {
+    flex: 1;
+    font-size: 1rem;
     font-weight: bold;
     color: #333;
 }
 
-.more{
+.more {
     cursor: pointer;
 }
 
-.oldPhotosContainer{
+.oldPhotosContainer {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: 20px;
-    margin-left: 20px;
-    border-radius: 10px;
-    padding: 10px;
-    -webkit-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    -moz-box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-    box-shadow: 0px 0px 9px -3px rgba(0,0,0,0.84);
-
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+    border-radius: 0.625rem;
+    padding: 0.625rem;
+    -webkit-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    -moz-box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
+    box-shadow: 0rem 0rem 0.5625rem -0.1875rem rgba(0, 0, 0, 0.84);
 }
 
-.upperOldPhotosContainer{
+.upperOldPhotosContainer {
     display: flex;
     justify-content: space-between;
     position: relative;
     align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #dddddd;
+    padding-bottom: 0.625rem;
+    border-bottom: 0.125rem solid #dddddd;
 }
 
-.oldphotos{
+.oldphotos {
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-right: 0.625rem;
+    margin-top: 0.625rem;
     cursor: pointer;
-
 }
 
-.oldPhoto{
-    height: 120px;
-    width: 120px;
-    border-radius: 10px;
+.oldPhoto {
+    height: 7.5rem;
+    width: 7.5rem;
+    border-radius: 0.625rem;
     object-fit: cover;
 }
 
 ::-webkit-scrollbar {
-    height: 8px; 
-    width: 5px;
+    height: 0.5rem;
+    width: 0.3125rem;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f0f0f0; 
+    background: #f0f0f0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #b0b0b0; 
-    border-radius: 4px;
+    background-color: #b0b0b0;
+    border-radius: 0.25rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #888; 
+    background-color: #888;
 }
 
+@media (max-width: 768px) {
+    .upperProfile {
+        margin: 1rem;
+    }
+
+    .myProfileImg {
+        width: 6rem;
+        height: 6rem;
+        margin-top: -3rem;
+    }
+
+    .myName {
+        font-size: 1.25rem;
+        margin-top: 3.5rem;
+    }
+
+    .lowProfile {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .myPosts, .rightLowProfile {
+        width: 90%;
+        margin-right: 0;
+    }
+
+    .friendsList, .descriptionMyProfile, .oldPhotosContainer {
+        width: 90%;
+        margin-left: 0;
+    }
+
+    .friendPhoto, .oldPhoto {
+        width: 5rem;
+        height: 5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .myProfileImg {
+        width: 5rem;
+        height: 5rem;
+        margin-top: -2.5rem;
+    }
+
+    .myName {
+        font-size: 1rem;
+        margin-top: 3rem;
+    }
+
+    .lowProfile {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .myPosts, .rightLowProfile {
+        width: 95%;
+    }
+
+    .friendsList, .descriptionMyProfile, .oldPhotosContainer {
+        width: 95%;
+    }
+
+    .friendPhoto, .oldPhoto {
+        width: 4rem;
+        height: 4rem;
+    }
+}
+
+/* Responsive styles */
+@media only screen and (max-width: 768px) {
+    .upperProfile {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+    
+    .lowProfile {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .myPosts {
+        margin-right: 0;
+        width: 90%;
+        margin-bottom: 2rem;
+    }
+    
+    .rightLowProfile {
+        width: 90%;
+    }
+    
+    .friendsList, .descriptionMyProfile, .oldPhotosContainer {
+        margin-left: 0;
+    }
+    
+    .friendPhoto, .oldPhoto {
+        height: 6rem;
+        width: 6rem;
+    }
+    
+    .myProfileImg {
+        width: 7rem;
+        height: 7rem;
+        margin-top: -4.5rem;
+    }
+    
+    .myName {
+        margin-top: 4rem;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .upperProfile {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    
+    .myProfileImg {
+        width: 5rem;
+        height: 5rem;
+        margin-top: -3rem;
+    }
+    
+    .myName {
+        margin-top: 3rem;
+        font-size: 1.2rem;
+    }
+    
+    .myPosts, .rightLowProfile {
+        width: 95%;
+    }
+    
+    .friendPhoto, .oldPhoto {
+        height: 4.5rem;
+        width: 4.5rem;
+    }
+    
+    .friendName {
+        margin-left: 0;
+        text-align: center;
+    }
+    
+    .lowFriendsList, .lowOldPhotosContainer {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    
+    .friends, .oldphotos {
+        margin-right: 0.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tBar {
+        height: 2.5rem;
+    }
+    
+    .background {
+        height: 30rem;
+    }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import "./tbar.css"
 
 import {Search, Person, CircleNotifications} from '@mui/icons-material';
@@ -10,9 +11,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from 'react-router-dom';
 
 
-export default function Tbar() {
+export default function Tbar() {  
+    const FLDR = process.env.REACT_APP_POSTS_FOLDER;
     const [open, setOpen] = useState(false);
+    const [user,setUsers]=useState({});
     const menuRef = useRef(null);
+
   
     const toggleMenu = () => {
       setOpen((prev) => !prev);
@@ -59,7 +63,7 @@ export default function Tbar() {
           
           <div className='moreAndProfile'>
             <Link to="/myprofile">
-                <img src="/assets/users/me.jpg" alt="" className="profileImg" />
+                <img src={user.profileImage || FLDR+"users/defaultProfileImage.png"} alt="" className="profileImg" />
             </Link>
             <div className="moreIconContainer" ref={menuRef}>
               <div className="moreIcon" onClick={toggleMenu}>

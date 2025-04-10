@@ -4,11 +4,7 @@ import axios from 'axios'
 import "./myprofile.css"
 
 import Tbar from '../../components/tbar/Tbar'
-import PostsByMe from '../../components/postsbyme/PostsByMe'
-import Postmaker from '../../components/postmaker/Postmaker'
 import Post from '../../components/post/Post'
-
-import {MyPosts} from "../../postsFile"
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -37,6 +33,7 @@ export default function MyProfile() {
       const fetchMyPosts = async () => {
         try {
           const response = await axios.get(`/postsRoute/gettingprofileposts/${user._id}`); 
+          console.log("Postări primite:", response.data);
           setMyPosts(response.data); 
         } catch (error) {
           console.error("Error fetching posts:", error);
@@ -54,9 +51,9 @@ export default function MyProfile() {
     <div className="myProfilePageContainer">
       <div className="background">
         <div className="upperProfile">
-          <img className="myCoverImg" src={`${FLDR}cover.jpg`} alt=""></img>
+          <img className="myCoverImg" src={user.coverImage || FLDR+"posts/defaultCoverImage.png"} alt=""></img>
           <div className="myProfileContainer">
-            <img className="myProfileImg" src="./assets/users/me.jpg" alt=""></img>
+            <img className="myProfileImg" src={user.profileImage || FLDR+"users/defaultProfileImage.png"} alt=""></img>
             <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
         </div>
@@ -89,16 +86,12 @@ export default function MyProfile() {
             </div>
 
             <div className="lowOldPhotosContainer">
-              <div className="oldphotos">
-                  <img src="./assets/myposts/mp1.jpg" className='oldPhoto' alt="img" />
-              </div>
-              <div className="oldphotos">
-                  <img src="./assets/myposts/mp2.jpg" className='oldPhoto' alt="img" />
-              </div>
-
-              <div className="oldphotos">
-                  <img src="./assets/myposts/mp3.jpg" className='oldPhoto' alt="img" />
-              </div>
+                {myPosts.map((post) => (
+                  post.postImage && (
+                    <div className="oldphotos" key={post._id}>
+                      <img src={FLDR + post.postImage} className="oldPhoto" alt="img" />
+                    </div>)
+                ))}
             </div>
 
           </div>

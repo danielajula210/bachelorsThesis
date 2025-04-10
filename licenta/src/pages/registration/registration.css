@@ -54,17 +54,6 @@
     gap: 15px;
 }
 
-.username{
-    font-size: 16px;
-    height: 50px;
-    width: 92%;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    padding: 0 15px;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
 .dateContainer{
     display: flex;
     align-items: center;
@@ -86,7 +75,7 @@
     width: 50%;
 }
 
-.email,.pass{
+.email,.pass, .lastname, .firstname{
     font-size: 16px;
     height: 50px;
     width: 92%;
