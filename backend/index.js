@@ -5,6 +5,9 @@ const helmet=require("helmet");
 const morgan=require("morgan");
 const mongoose = require('mongoose');
 const dotenv=require("dotenv");
+const multer=require("multer");
+const path= require("path");
+
 const userRoute = require("./routers/usersRoute")
 const registerRoute = require("./routers/authentificationRoute")
 const postsRoute=require("./routers/postsRoute")
@@ -27,9 +30,29 @@ async function connectDB() {
 
 connectDB();
 
+app.use("/photos",express.static(path.join(__dirname,"/public/photos")));
+
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
+
+const postsStorage=multer.diskStorage({
+    destination:(request,file,callback)=>{
+        callback(null,"public/photos");
+    },
+    filename:(request,file,callback)=>{
+        callback(null,request.body.name);
+    }
+});
+
+const upload = multer({postsStorage});
+app.post("/api/upload",upload.single("file"),(request,response)=>{
+    try{
+        return response.status(200).json("Uploaded successfully")
+    }catch(error){
+        console.log(error);
+    };
+});
 
 app.use("/api/usersRoute", userRoute)
 app.use("/api/authentificationRoute", registerRoute)

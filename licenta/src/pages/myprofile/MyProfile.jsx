@@ -25,6 +25,7 @@ export default function MyProfile() {
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
+        alert("Failed to load user data. Please try again later.");
       }
     };
   
@@ -61,17 +62,18 @@ export default function MyProfile() {
       fetchFriends();
     }
   }, [user._id]);
+  console.log(friends);
 
-
+  console.log(user);
   return (
     <>
     <div className="tBar"><Tbar/></div>
     <div className="myProfilePageContainer">
       <div className="background">
         <div className="upperProfile">
-          <img className="myCoverImg" src={user.coverImage || FLDR+"posts/defaultCoverImage.png"} alt=""></img>
+          <img className="myCoverImg" src={user.coverImage ? FLDR+user.coverImage : "/assets/posts/defaultCoverImage.png"}  alt=""></img>
           <div className="myProfileContainer">
-            <img className="myProfileImg" src={user.profileImage || FLDR+"users/defaultProfileImage.png"} alt=""></img>
+            <img className="myProfileImg"   src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt=""></img>
             <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
         </div>
@@ -100,7 +102,7 @@ export default function MyProfile() {
             <div className="upperOldPhotosContainer">
               <span className='oldtitle'>Postările tale</span>
               <span className='seeAllOldPosts'>Vezi toate postările </span>
-              <span className='allOldPostNumber'>3 postări</span>
+              <span className='allOldPostNumber'>{myPosts.filter(post => post.postImage).length}</span>
             </div>
 
             <div className="lowOldPhotosContainer">
@@ -118,13 +120,13 @@ export default function MyProfile() {
             <div className="upFriendsList">
               <span className='allFriends'>Lista ta de prieteni</span>
               <span className='seeAllFriends'>Vezi intreaga listă </span>
-              <span className='allFriendsNumber'>3 prieteni</span>
+              <span className='allFriendsNumber'>{friends.length}</span>
             </div>
             
             <div className="lowFriendsList">
                 {friends.map((friend) => (
                   <div className="friends" key={friend._id}>
-                    <img src={friend.profileImage || FLDR + "users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
+                    <img src={friend.profileImage ? FLDR+friend.profileImage : "/assets/users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
                     <span className="friendName">{friend.lastname} {friend.firstname}</span>
                   </div>
                 ))}

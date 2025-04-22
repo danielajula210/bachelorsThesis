@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 
 import "./tbar.css"
@@ -16,12 +17,23 @@ import LogoutIcon from "@mui/icons-material/Logout";
 export default function Tbar() {  
     const FLDR = process.env.REACT_APP_POSTS_FOLDER;
     const [open, setOpen] = useState(false);
-    //const [user,setUsers]=useState({});
+    const [user,setUsers]=useState({});
+    const {user:loggedInUser}= useContext(RegistrationContext);
     const menuRef = useRef(null);
-
-    const {user}=useContext(RegistrationContext);
-
   
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
+          setUsers(response.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+    
+      fetchUser();
+    }, []);
+
     const toggleMenu = () => {
       setOpen((prev) => !prev);
     };
@@ -67,7 +79,7 @@ export default function Tbar() {
           
           <div className='moreAndProfile'>
             <Link to='/myprofile'>
-                <img src={user.profileImage ? FLDR+user.profileImage: FLDR+"users/defaultProfileImage.png"} alt="" className="profileImg" />
+                <img src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt="" className="profileImg" />
             </Link>
             <div className="moreIconContainer" ref={menuRef}>
               <div className="moreIcon" onClick={toggleMenu}>
