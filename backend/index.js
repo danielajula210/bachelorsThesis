@@ -1,5 +1,6 @@
 const express = require ("express");
-const app = express()
+const cors = require('cors');
+const app = express();
 
 const helmet=require("helmet");
 const morgan=require("morgan");
@@ -36,16 +37,17 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-const postsStorage=multer.diskStorage({
+const storage=multer.diskStorage({
     destination:(request,file,callback)=>{
         callback(null,"public/photos");
     },
     filename:(request,file,callback)=>{
-        callback(null,request.body.name);
+        const filename = file.originalname;
+        callback(null,filename);
     }
 });
 
-const upload = multer({postsStorage});
+const upload = multer({storage});
 app.post("/api/upload",upload.single("file"),(request,response)=>{
     try{
         return response.status(200).json("Uploaded successfully")
@@ -53,6 +55,11 @@ app.post("/api/upload",upload.single("file"),(request,response)=>{
         console.log(error);
     };
 });
+
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true
+}));
 
 app.use("/api/usersRoute", userRoute)
 app.use("/api/authentificationRoute", registerRoute)

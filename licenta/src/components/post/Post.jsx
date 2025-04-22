@@ -45,6 +45,8 @@ export default function Post({post}) {
             setLiked(false); 
         }
     }, [currentuser._id, post.postLikes]);
+    console.log("Post primit:", post);
+
 
     return (
         <div className="post">
@@ -62,7 +64,7 @@ export default function Post({post}) {
                 </div>
 
                 <div className="middlePart">
-                    <span className='description'>{post?.description}</span>
+                    <span className='description'>{post?.postDescription}</span>
                     <img className="photo"src={FLDR+post.postImage} alt="img" />
                 </div>
 

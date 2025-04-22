@@ -33,19 +33,18 @@ export default function Postmaker() {
     e.preventDefault();
     const newPost={
       userId:user._id,
-      description: description.current.value
+      postDescription: description.current.value
     }
 
     if(file){
       const formData=new FormData();
-      const filename= Date.now() + file.name;
+      const filename= file.name;
 
       formData.append("file",file);
       formData.append("name", filename);
       newPost.postImage=filename;
-      console.log(newPost);
       try{
-        await axios.post("/upload",formData);
+        await axios.post("/upload",formData,);
       }catch(error){
         console.log(error);
       }
