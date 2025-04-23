@@ -23,7 +23,7 @@ export default function Activity({userId}) {
     <div className='activity'>
       <div className="activityContainer">
         <Postmaker/>
-        {posts.map( (p) => (<Post key={p._id} post={p}/>) )} 
+        {posts.slice().reverse().map( (p) => (<Post key={p._id} post={p}/>) )} 
       </div>
     </div>
   );

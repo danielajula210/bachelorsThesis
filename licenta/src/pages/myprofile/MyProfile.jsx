@@ -17,6 +17,7 @@ export default function MyProfile() {
   const {user:loggedInUser}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
+  const [friend,setFriend]=useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -62,9 +63,27 @@ export default function MyProfile() {
       fetchFriends();
     }
   }, [user._id]);
-  console.log(friends);
 
+  console.log(friends);
   console.log(user);
+
+  const handleClick=async()=>{
+    try{
+      if(friend){
+        await axios.put("/usersRoute/"+user._id+"/friends",{userId:loggedInUser._id});
+      }else{
+        await axios.put("/usersRoute/"+user._id+"/unfriend",{userId:loggedInUser._id});
+      }
+    }catch(error){
+      console.log(error);
+    }
+    setFriend(!friend);
+  };
+
+  useEffect(()=>{
+    setFriend(loggedInUser.friends.includes(user?.id))
+  },[loggedInUser,user._id]);
+
   return (
     <>
     <div className="tBar"><Tbar/></div>
@@ -75,19 +94,20 @@ export default function MyProfile() {
           <div className="myProfileContainer">
             <img className="myProfileImg"   src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt=""></img>
             <span className="myName">{user.lastname} {user.firstname}</span>
+            {user._id && user._id !== loggedInUser._id && (
+              <button className="followBtn" onClick={handleClick}>{friend? "Nu mai urmări":"Urmărește"}Urmărește</button>
+            )}
           </div>
         </div>
       </div>
       
       <div className="lowProfile">
         <div className="myPosts">
-                {myPosts.map( (p) => (<Post key={p._id} post={p}/>) )} 
+          {myPosts.slice().reverse().map((p) => (<Post key={p._id} post={p} />))}
         </div>
 
-
         <div className="rightLowProfile">
-
-
+        
           <div className="descriptionMyProfile">
             <div className="upDescription">
               <span className='title'>Descriere</span>
@@ -106,11 +126,15 @@ export default function MyProfile() {
             </div>
 
             <div className="lowOldPhotosContainer">
-                {myPosts.map((post) => (
-                  post.postImage && (
-                    <div className="oldphotos" key={post._id}>
-                      <img src={FLDR + post.postImage} className="oldPhoto" alt="img" />
-                    </div>)
+            {myPosts
+                .filter(post => post.postImage) 
+                .slice() 
+                .reverse() 
+                .slice(0, 3)
+                .map((post) => (
+                  <div className="oldphotos" key={post._id}>
+                    <img src={FLDR + post.postImage} className="oldPhoto" alt="img" />
+                  </div>
                 ))}
             </div>
 
@@ -124,7 +148,7 @@ export default function MyProfile() {
             </div>
             
             <div className="lowFriendsList">
-                {friends.map((friend) => (
+                {friends.slice(0, 3).map((friend) => (
                   <div className="friends" key={friend._id}>
                     <img src={friend.profileImage ? FLDR+friend.profileImage : "/assets/users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
                     <span className="friendName">{friend.lastname} {friend.firstname}</span>
