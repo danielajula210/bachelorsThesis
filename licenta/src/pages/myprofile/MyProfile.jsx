@@ -14,7 +14,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 export default function MyProfile() {
   const FLDR = process.env.REACT_APP_POSTS_FOLDER;
   const [user,setUsers]=useState({});
-  const {user:loggedInUser}= useContext(RegistrationContext);
+  const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
   const [friend,setFriend]=useState(false);
@@ -70,9 +70,11 @@ export default function MyProfile() {
   const handleClick=async()=>{
     try{
       if(friend){
-        await axios.put("/usersRoute/"+user._id+"/friends",{userId:loggedInUser._id});
-      }else{
         await axios.put("/usersRoute/"+user._id+"/unfriend",{userId:loggedInUser._id});
+        dispatch({type:"UNFRIEND",payload:user._id});
+      }else{
+        await axios.put("/usersRoute/"+user._id+"/friends",{userId:loggedInUser._id});
+        dispatch({type:"FRIEND",payload:user._id});
       }
     }catch(error){
       console.log(error);

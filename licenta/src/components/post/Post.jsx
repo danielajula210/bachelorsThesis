@@ -53,7 +53,7 @@ export default function Post({post}) {
             <div className='postContainer'>
                 <div className="upPart">
                     <div className="leftUpPart">
-                        <Link to={`MyProfile`}><img className="profileImgInPost"src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt="img" /></Link>
+                        <Link to={`/myprofile/${user._id}`}><img className="profileImgInPost"src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt="img" /></Link>
                         <span className="usernameInPost">{user.lastname} {user.firstname}</span>
                         <span className="dateInPost">{format(post.createdAt)}</span>
                     </div>

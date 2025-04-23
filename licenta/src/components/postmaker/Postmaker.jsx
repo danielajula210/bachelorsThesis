@@ -6,12 +6,15 @@ import { RegistrationContext } from '../../context/RegistrationContext';
 
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 export default function Postmaker() {
   const FLDR = process.env.REACT_APP_POSTS_FOLDER;
   const [user,setUsers]=useState({});
   const {user:loggedInUser}= useContext(RegistrationContext);
+  const description = useRef();
+  const [file,setFile] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -25,9 +28,6 @@ export default function Postmaker() {
   
     fetchUser();
   }, []);
-
-  const description = useRef();
-  const [file,setFile] = useState(null);
 
   const handleSubmit= async (e)=>{
     e.preventDefault();
@@ -67,6 +67,12 @@ export default function Postmaker() {
         </div>
 
         <hr className="downpartSeparater"/>
+        {file && (
+          <div className="postingContainer">
+            <img  src={URL.createObjectURL(file)} className="postingImage" ></img>
+            <CancelIcon className="postCancel" onClick={()=>setFile(null)}/>
+          </div>
+        )}
         <form className="downPart" onSubmit={handleSubmit}>
             <div className="postingMakerOptions">
               
