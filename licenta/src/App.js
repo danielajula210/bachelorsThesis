@@ -16,7 +16,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={user ? <Home /> : <Registration/>} />
-        <Route path="/myprofile/" element={<MyProfile />} />
+        <Route path="/myprofile" element={<MyProfile />} />
+        <Route path="/myprofile/:userId" element={<MyProfile />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/registration" element={user ? <Navigate to="/" /> : <Registration />}/>
       </Routes>

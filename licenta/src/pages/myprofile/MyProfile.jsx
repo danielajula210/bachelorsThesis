@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useContext } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router'
 
 import "./myprofile.css"
 
@@ -17,12 +18,14 @@ export default function MyProfile() {
   const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
-  const [friend,setFriend]=useState(false);
+  const [friend,setFriend]=useState(loggedInUser.friends.includes(user?.id));
+  const params = useParams();
+  const userId = params.userId || loggedInUser._id;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
+        const response = await axios.get(`/usersRoute?userId=${userId}`);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -64,8 +67,7 @@ export default function MyProfile() {
     }
   }, [user._id]);
 
-  console.log(friends);
-  console.log(user);
+  console.log(loggedInUser);
 
   const handleClick=async()=>{
     try{
@@ -82,10 +84,6 @@ export default function MyProfile() {
     setFriend(!friend);
   };
 
-  useEffect(()=>{
-    setFriend(loggedInUser.friends.includes(user?.id))
-  },[loggedInUser,user._id]);
-
   return (
     <>
     <div className="tBar"><Tbar/></div>
@@ -96,9 +94,6 @@ export default function MyProfile() {
           <div className="myProfileContainer">
             <img className="myProfileImg"   src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt=""></img>
             <span className="myName">{user.lastname} {user.firstname}</span>
-            {user._id && user._id !== loggedInUser._id && (
-              <button className="followBtn" onClick={handleClick}>{friend? "Nu mai urmări":"Urmărește"}Urmărește</button>
-            )}
           </div>
         </div>
       </div>
@@ -109,7 +104,9 @@ export default function MyProfile() {
         </div>
 
         <div className="rightLowProfile">
-        
+          {user._id && user._id !== loggedInUser._id && (
+                <button className="followBtn" onClick={handleClick}>{friend? "Nu mai urmări":"Urmărește"}</button>
+          )}
           <div className="descriptionMyProfile">
             <div className="upDescription">
               <span className='title'>Descriere</span>
