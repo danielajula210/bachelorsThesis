@@ -20,6 +20,9 @@ export default function Tbar() {
     const [user,setUsers]=useState({});
     const {user:loggedInUser}= useContext(RegistrationContext);
     const menuRef = useRef(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [showResults, setShowResults] = useState(false);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -51,14 +54,66 @@ export default function Tbar() {
       };
     }, [menuRef]);
 
+    
+    const handleSearchChange = async (e) => {
+      const value = e.target.value;
+      setSearchTerm(value);
+      if (value.trim() === "") {
+          setSearchResults([]);
+          setShowResults(false);
+          return;
+      }
+
+      try {
+          const res = await axios.get(`/usersRoute/search?query=${value}`);
+          setSearchResults(res.data); 
+          setShowResults(true);
+      } catch (err) {
+          console.error("Search error:", err);
+          setShowResults(false);
+      }
+    };
+
+    const handleResultClick = () => {
+        setShowResults(false);
+        setSearchTerm("");
+    };
+
   return (
     <div className='tbarContainer'>
         <div className="leftTopbar">
           <span className="logo">VIBEZ</span>
-          <div className="searchBar">
-              <Search className='searchIcon'/>
-              <input placeholder='Caută pe Vibez' className="searchInput" />
-          </div>
+            <div className='searchBarContainer'>
+              <div className="searchBar">
+                <Search className='searchIcon'/>
+                <input
+                    placeholder='Caută pe Vibez'
+                    className="searchInput"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+              </div>
+              {showResults && searchResults.length > 0 && (
+                <div className='searchResults'>
+                  {searchResults.map((item) => (
+                    <Link
+                      to={`/myprofile/${item._id}`}
+                      className="searchResultItem"
+                      key={item._id}
+                      onClick={handleResultClick}
+                    >
+                      <img
+                        src={item.profileImage ? FLDR + item.profileImage : "/assets/users/defaultProfileImage.png"}
+                        alt="profile"
+                      />
+                      <div className="searchText">
+                        <span className="name"> {item.lastname} {item.firstname}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
         </div>
 
         <div className="rightTopbar">

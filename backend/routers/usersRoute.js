@@ -100,4 +100,20 @@ router.get("/getFriends/:userId", async (req, res) => {
     }
 });
 
+router.get("/search", async (req, res) => {
+    const query = req.query.query;
+    try {
+      const users = await userModel.find({
+        $or: [
+          { firstname: { $regex: query, $options: "i" } },
+          { lastname: { $regex: query, $options: "i" } }
+        ]
+      }).select("_id firstname lastname profileImage");
+  
+      res.status(200).json(users);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
 module.exports = router

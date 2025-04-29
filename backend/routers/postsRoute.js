@@ -60,11 +60,11 @@ router.get("/gettingposts/:userId", async (request, response) => {
 //forAdmin
 router.get("/foradmin", async (request, response) => {
     try {
-        const allPosts = await postModel.findById(request.params.id); 
-        response.status(200).json(allPosts);
-
+        const allPosts = await postModel.find();
+        response.status(200).json(allPosts); 
     } catch (error) {
-        response.status(500).json(error);
+        console.error("Eroare la obținerea postărilor:", error);
+        response.status(500).json(error); 
     }
 });
 
