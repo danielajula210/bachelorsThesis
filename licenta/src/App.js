@@ -5,6 +5,7 @@ import Home from "./pages/home/Home";
 import MyProfile from "./pages/myprofile/MyProfile.jsx";
 import Login from "./pages/login/Login"
 import Registration from "./pages/registration/Registration.jsx";
+import AdminPanel from './pages/admin/AdminPanel.jsx';
 
 import {RegistrationContext} from "./context/RegistrationContext.js"
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/myprofile/:userId" element={<MyProfile />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/registration" element={user ? <Navigate to="/" /> : <Registration />}/>
+        <Route path="/admin" element={<AdminPanel/>}/>
       </Routes>
     </Router>
   );

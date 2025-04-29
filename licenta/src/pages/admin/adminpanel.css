@@ -1,0 +1,112 @@
+.admin-panel {
+    padding: 24px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+  
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .search-input {
+    width: 300px;
+    max-width: 100%;
+  }
+  
+  .panel-content {
+    display: flex;
+    gap: 24px;
+  }
+  
+  .posts-list {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .post-card {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .post-author {
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  
+  .post-time {
+    color: #999;
+    font-size: 0.8em;
+  }
+  
+  .post-title {
+    margin-top: 8px;
+    margin-bottom: 4px;
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+  
+  .post-text {
+    margin: 0;
+    color: #333;
+  }
+  
+  .post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .stats-card,
+  .actions-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .action-button {
+    margin-bottom: 8px;
+  }
+  
+  .no-posts-card {
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  @media (max-width: 768px) {
+    .panel-content {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      order: -1;
+      margin-bottom: 24px;
+    }
+  }
