@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 
 import "./tbar.css"
 
 import {RegistrationContext} from "../../context/RegistrationContext";
+import { Logout } from "../../context/RegistrationAction";
 
 import {Search, Person, CircleNotifications} from '@mui/icons-material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -23,6 +24,8 @@ export default function Tbar() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
+    const navigate = useNavigate();
+    const { dispatch } = useContext(RegistrationContext);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -78,6 +81,13 @@ export default function Tbar() {
         setShowResults(false);
         setSearchTerm("");
     };
+
+    const handleLogout = (e) => {
+      e?.preventDefault?.();
+      dispatch(Logout()); 
+      localStorage.removeItem("user");
+      navigate("/login");
+  };
 
   return (
     <div className='tbarContainer'>
@@ -146,12 +156,10 @@ export default function Tbar() {
                     <SettingsIcon />
                     <span>Setări</span>
                   </div>
-                  <Link to="/login" className=' toLogout'>
-                  <div className="dropdownItem">
-                    <LogoutIcon/>
-                    <span>Deconectare</span>
-                  </div>
-                  </Link>
+                  <button className="dropdownItem" onClick={handleLogout}>
+                      <LogoutIcon />
+                      <span>Deconectare</span>
+                  </button>
                 </div>
               )}
           </div>

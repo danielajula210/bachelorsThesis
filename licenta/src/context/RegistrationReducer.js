@@ -34,6 +34,12 @@ const RegistrationReducer = (state, action) => {
                     friends: state.user.friends.filter((friends)=>friends!==action.payload),
                 },
             }; 
+        case "LOGOUT":
+            return {
+                user: null,
+                isFetching: false,
+                error: false,
+            };
         default:
             return state;
     }

@@ -59,6 +59,7 @@ export default function Registration() {
                         <input placeholder="Reintrodu parola" required ref={password2} className="pass"type="password" minLength="8"></input>
                         {errorMessage && <span style={{ color: "red" }}>{errorMessage}</span>}
                         <button className="buttonRegistration" type="submit" onClick={handleClick}>Înregistrează-te</button>
+                        <button className="buttonLoginReg"  onClick={() => navigate("/login")}>Conectează-te</button>
                     </form>
                 </div>
             </div>

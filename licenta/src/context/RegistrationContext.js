@@ -2,17 +2,7 @@ import {createContext,useReducer} from 'react';
 import RegistrationReducer from './RegistrationReducer';
 
 const INITIAL_STATE = {
-    user:{ 
-        _id:"67f78c703b0e1ee1642e6275",
-        lastname:"Mira",
-        firstname:"Ioana Denisa",
-        dateofbirth:"2007-03-17T00:00:00.000+00:00",
-        email:"miradenisa21@gmail.com",
-        profileImage:"",
-        coverImage:"",
-        friends:[],
-        theAdmin:false
-    },
+    user: JSON.parse(localStorage.getItem("user")) || null,
     isFetching: false,
     error: false,
 };
