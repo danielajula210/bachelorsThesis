@@ -9,6 +9,8 @@ import Post from '../../components/post/Post'
 import { RegistrationContext } from '../../context/RegistrationContext'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import WallpaperIcon from '@mui/icons-material/Wallpaper';
+import { CommentsDisabledOutlined } from '@mui/icons-material'
 
 
 
@@ -18,9 +20,14 @@ export default function MyProfile() {
   const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
-  const [friend,setFriend]=useState(loggedInUser.friends.includes(user?.id));
+  const [friend, setFriend] = useState(() => {
+    return loggedInUser?.friends?.includes(user?.id) || false;
+  });
+  const [coverImageFile, setCoverImageFile] = useState(null);
+  
   const params = useParams();
-  const userId = params.userId || loggedInUser._id;
+  const userId = params.userId || loggedInUser?._id;
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -84,15 +91,74 @@ export default function MyProfile() {
     setFriend(!friend);
   };
 
+
+  const handleCoverImageChange = (e) => {
+    const file = e.target.files[0];
+    setCoverImageFile(file); 
+  };
+
+  const handleCoverImageUpload = async () => {
+    if (!coverImageFile) {
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('file', coverImageFile); // asigură-te că cheia este 'file'
+  
+    try {
+      await axios.post("/upload", formData);
+      console.log("Locally saved!");
+  
+      const response = await axios.put(`/usersRoute/${user._id}/updateCoverImage`, formData);
+  
+      if (response.status === 200) {
+        setUsers((prevUser) => ({
+          ...prevUser,
+          coverImage: response.data.coverImage, // Actualizează cu noua cale
+        }));
+      }
+    } catch (error) {
+      console.error('Error uploading cover image:', error);
+    }
+  };
+  
+
+
   return (
     <>
     <div className="tBar"><Tbar/></div>
     <div className="myProfilePageContainer">
       <div className="background">
         <div className="upperProfile">
-          <img className="myCoverImg" src={user.coverImage ? FLDR+user.coverImage : "/assets/posts/defaultCoverImage.png"}  alt=""></img>
+          <div className="imageWrapperCover">
+              <img
+                className="myCoverImg"
+                src={user.coverImage ? FLDR + user.coverImage : "/assets/posts/defaultCoverImage.png"}
+                alt=""
+              />
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                onChange={handleCoverImageChange}
+                id="coverImageInput"
+              />
+              <WallpaperIcon
+                className="cornerIconCover"
+                onClick={() => document.getElementById('coverImageInput').click()}
+              />
+              {coverImageFile && (
+                <button onClick={handleCoverImageUpload}>Upload Cover Image</button>
+              )}
+            </div>
           <div className="myProfileContainer">
-            <img className="myProfileImg"   src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt=""></img>
+            <div className="imageWrapper">
+              <img
+                className="myProfileImg"
+                src={user.profileImage ? FLDR + user.profileImage : "/assets/users/defaultProfileImage.png"}
+                alt=""
+              />
+              <WallpaperIcon className="cornerIcon" />
+            </div>
             <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
         </div>

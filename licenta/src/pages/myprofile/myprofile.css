@@ -35,6 +35,27 @@
     cursor: pointer;
 }
 
+.imageWrapperCover {
+    position: relative;
+    display: inline-block;
+}
+
+.cornerIconCover {
+    position: absolute;
+    bottom: 0.5rem;
+    right:0.2rem; 
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 0.3rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.cornerIconCover:hover {
+background-color: rgba(200, 200, 200, 0.9);
+}
+
 .myProfileContainer {
     display: flex;
     flex-direction: column;
@@ -52,14 +73,34 @@
     object-fit: cover;
     border: 0.125rem solid white;
     cursor: pointer;
+    position: relative;
+}
+
+.imageWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cornerIcon {
     position: absolute;
+    top: 0.5rem;
+    right:0.2rem; 
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 0.3rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.cornerIcon:hover {
+background-color: rgba(200, 200, 200, 0.9);
 }
 
 .myName {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
-    margin-top: 5rem;
 }
 
 .lowProfile {

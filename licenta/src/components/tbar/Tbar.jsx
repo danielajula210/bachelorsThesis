@@ -87,7 +87,8 @@ export default function Tbar() {
       dispatch(Logout()); 
       localStorage.removeItem("user");
       navigate("/login");
-  };
+      window.location.reload();
+    };
 
   return (
     <div className='tbarContainer'>

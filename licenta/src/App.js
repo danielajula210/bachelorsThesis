@@ -24,7 +24,7 @@ function App() {
               <Home />
             )
           ) : (
-            <Registration />
+            <Login  />
           )
         } />
         <Route path="/myprofile" element={<MyProfile />} />

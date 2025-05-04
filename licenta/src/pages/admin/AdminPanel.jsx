@@ -32,10 +32,10 @@ export default function AdminPanel() {
     }, []);
 
     const handleLogout = (e) => {
-      e?.preventDefault?.();
-      dispatch(Logout()); 
-      localStorage.removeItem("user");
-      navigate("/login");
+        e?.preventDefault?.();
+        dispatch(Logout()); 
+        localStorage.removeItem("user");
+        navigate("/login");
     };
 
     if (loading) {
@@ -48,13 +48,15 @@ export default function AdminPanel() {
 
     return (
         <div className="adminPanel">
-            <h1>Postări Admin</h1>
-            <button className="logoutButton" onClick={handleLogout}>
-                Deconectare
-            </button>
+            <div className="adminHeader">
+                <h1 className="adminTitle">Panou administrativ</h1>
+                <button className="logoutButton" onClick={handleLogout}>
+                    Deconectare
+                </button>
+            </div>
             <div className="postsContainer">
                 {posts.length > 0 ? (
-                    posts.map(post => <Post key={post._id} post={post} />)
+                    [...posts].reverse().map(post => <Post key={post._id} post={post} />)
                 ) : (
                     <p>Nu sunt postări disponibile.</p>
                 )}

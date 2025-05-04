@@ -1,18 +1,22 @@
 .adminPanel {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 100%;
     padding: 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.adminPanel h1 {
-    text-align: center;
-    color: #2c3e50;
+.adminHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
-    font-size: 2.5rem;
-    border-bottom: 2px solid #3498db;
     padding-bottom: 0.5rem;
-    display: inline-block;
+}
+
+.adminHeader h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #2c3e50;
+    padding-left: 550px;
 }
 
 .postsContainer {
@@ -42,31 +46,29 @@
     background-color: #eaf2f8;
 }
 
-.adminPanel > div:not(:empty) {
-    color: #e74c3c;
-    background-color: #fdedec;
-}
+
 
 .logoutButton {
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #ff4d4d;
+    padding: 6px 12px;
+    background-color: #bf9cfc;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
+    margin-top: -150px;
+    margin-right: -30px;
 }
 
 .logoutButton:hover {
-    background-color: #e04343;
+    background-color: #b38afa;
 }
 
 @media (max-width: 768px) {
     .adminPanel {
         padding: 1rem;
     }
-    
+
     .postsContainer {
         grid-template-columns: 1fr;
     }
