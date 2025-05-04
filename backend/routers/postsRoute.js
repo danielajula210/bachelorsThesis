@@ -31,6 +31,15 @@ router.delete("/:id",async(request,response)=>{
 });
 
 
+router.get("/foradmin", async (req, res) => {
+    try {
+        const allPosts = await postModel.find();
+        res.status(200).json(allPosts);
+    } catch (error) {
+        res.status(500).json({ message: "Eroare la obținerea postărilor", error });
+    }
+});
+
 //get a post
 router.get("/:id",async(request,response)=>{
     try{
@@ -57,16 +66,6 @@ router.get("/gettingposts/:userId", async (request, response) => {
     }
 });
 
-//forAdmin
-router.get("/foradmin", async (request, response) => {
-    try {
-        const allPosts = await postModel.find();
-        response.status(200).json(allPosts); 
-    } catch (error) {
-        console.error("Eroare la obținerea postărilor:", error);
-        response.status(500).json(error); 
-    }
-});
 
 
 //MyProfile posts

@@ -18,7 +18,7 @@ const PostSchema= new mongoose.Schema({
     },
     postDislikes:{
         type:Array,
-        defaukt:[]
+        default:[]
     },
 },{timestamps:true});
 

@@ -47,6 +47,21 @@
     background-color: #fdedec;
 }
 
+.logoutButton {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.logoutButton:hover {
+    background-color: #e04343;
+}
+
 @media (max-width: 768px) {
     .adminPanel {
         padding: 1rem;

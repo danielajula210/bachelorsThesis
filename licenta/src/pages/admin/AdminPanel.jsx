@@ -1,27 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Post from '../../components/post/Post'; 
+
 import "./adminpanel.css";
+
+import Post from '../../components/post/Post'; 
+import { Logout } from "../../context/RegistrationAction";
+import {RegistrationContext} from "../../context/RegistrationContext";
 
 export default function AdminPanel() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { dispatch } = useContext(RegistrationContext);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('/postsRoute/foradmin');
-                setPosts(response.data);
-                setLoading(false);
+                setPosts(response.data); 
+                setLoading(false); 
             } catch (error) {
                 setError('Nu s-au putut încărca postările.');
                 setLoading(false);
             }
         };
+        
 
         fetchPosts();
     }, []);
+
+    const handleLogout = (e) => {
+      e?.preventDefault?.();
+      dispatch(Logout()); 
+      localStorage.removeItem("user");
+      navigate("/login");
+    };
 
     if (loading) {
         return <div>Se încarcă postările...</div>;
@@ -34,6 +49,9 @@ export default function AdminPanel() {
     return (
         <div className="adminPanel">
             <h1>Postări Admin</h1>
+            <button className="logoutButton" onClick={handleLogout}>
+                Deconectare
+            </button>
             <div className="postsContainer">
                 {posts.length > 0 ? (
                     posts.map(post => <Post key={post._id} post={post} />)
