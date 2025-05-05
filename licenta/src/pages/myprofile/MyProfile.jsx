@@ -20,13 +20,13 @@ export default function MyProfile() {
   const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
-  const [friend, setFriend] = useState(() => {
-    return loggedInUser?.friends?.includes(user?.id) || false;
-  });
+  const [friend, setFriend] = useState(false);
+
   const [coverImageFile, setCoverImageFile] = useState(null);
+  const [profileImageFile, setProfileImageFile] = useState(null);
   
   const params = useParams();
-  const userId = params.userId || loggedInUser?._id;
+  const userId = params.userId || (loggedInUser ? loggedInUser._id : null);
 
 
   useEffect(() => {
@@ -57,7 +57,14 @@ export default function MyProfile() {
 
       fetchMyPosts();
     }
-  }, [user._id]);
+  }, [user && user._id]);
+
+  useEffect(() => {
+    if (loggedInUser && user?._id) {
+      setFriend(loggedInUser.friends?.includes(user._id));
+    }
+  }, [loggedInUser, user]);
+  
 
   useEffect(() => {
     if (user._id) {
@@ -76,51 +83,72 @@ export default function MyProfile() {
 
   console.log(loggedInUser);
 
-  const handleClick=async()=>{
-    try{
-      if(friend){
-        await axios.put("/usersRoute/"+user._id+"/unfriend",{userId:loggedInUser._id});
-        dispatch({type:"UNFRIEND",payload:user._id});
-      }else{
-        await axios.put("/usersRoute/"+user._id+"/friends",{userId:loggedInUser._id});
-        dispatch({type:"FRIEND",payload:user._id});
+  const handleClick = async () => {
+    if (!loggedInUser || !user?._id) return;
+    try {
+      if (friend) {
+        await axios.put("/usersRoute/"+user._id+"/unfriend", {userId: loggedInUser._id});
+        dispatch({type: "UNFRIEND", payload: user._id});
+      } else {
+        await axios.put("/usersRoute/"+user._id+"/friends", {userId: loggedInUser._id});
+        dispatch({type: "FRIEND", payload: user._id});
       }
-    }catch(error){
+      setFriend(!friend);
+    } catch (error) {
       console.log(error);
     }
-    setFriend(!friend);
   };
 
 
-  const handleCoverImageChange = (e) => {
-    const file = e.target.files[0];
-    setCoverImageFile(file); 
-  };
-
-  const handleCoverImageUpload = async () => {
-    if (!coverImageFile) {
-      return;
-    }
+const handleCoverImageChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  setCoverImageFile(file);
   
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    await axios.post("/upload", formData);
+    const response = await axios.put(`/usersRoute/${user._id}/updateCoverImage`, formData);
+
+    if (response.status === 200) {
+      setUsers((prevUser) => ({
+        ...prevUser,
+        coverImage: response.data.coverImage,
+      }));
+    }
+    window.location.reload();
+  } catch (error) {
+    console.error('Error uploading cover image:', error);
+  }
+};
+  
+
+  const handleProfileImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setProfileImageFile(file);
+    
     const formData = new FormData();
-    formData.append('file', coverImageFile); // asigură-te că cheia este 'file'
+    formData.append('file', file);
   
     try {
       await axios.post("/upload", formData);
-      console.log("Locally saved!");
-  
-      const response = await axios.put(`/usersRoute/${user._id}/updateCoverImage`, formData);
+      const response = await axios.put(`/usersRoute/${user._id}/updateProfileImage`, formData);
   
       if (response.status === 200) {
         setUsers((prevUser) => ({
           ...prevUser,
-          coverImage: response.data.coverImage, // Actualizează cu noua cale
+          profileImage: response.data.profileImage,
         }));
       }
+      window.location.reload();
     } catch (error) {
-      console.error('Error uploading cover image:', error);
+      console.error('Error uploading profile image:', error);
     }
   };
+  
   
 
 
@@ -146,10 +174,7 @@ export default function MyProfile() {
                 className="cornerIconCover"
                 onClick={() => document.getElementById('coverImageInput').click()}
               />
-              {coverImageFile && (
-                <button onClick={handleCoverImageUpload}>Upload Cover Image</button>
-              )}
-            </div>
+          </div>
           <div className="myProfileContainer">
             <div className="imageWrapper">
               <img
@@ -157,8 +182,17 @@ export default function MyProfile() {
                 src={user.profileImage ? FLDR + user.profileImage : "/assets/users/defaultProfileImage.png"}
                 alt=""
               />
-              <WallpaperIcon className="cornerIcon" />
-            </div>
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                onChange={handleProfileImageChange}
+                id="profileImageInput"
+              />
+              <WallpaperIcon
+                className="cornerIcon"
+                onClick={() => document.getElementById('profileImageInput').click()}
+              />
+          </div>
             <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
         </div>
@@ -170,8 +204,10 @@ export default function MyProfile() {
         </div>
 
         <div className="rightLowProfile">
-          {user._id && user._id !== loggedInUser._id && (
-                <button className="followBtn" onClick={handleClick}>{friend? "Nu mai urmări":"Urmărește"}</button>
+          {loggedInUser && user._id && user._id !== loggedInUser._id && (
+            <button className="followBtn" onClick={handleClick}>
+              {friend ? "Nu mai urmări" : "Urmărește"}
+            </button>
           )}
           <div className="descriptionMyProfile">
             <div className="upDescription">

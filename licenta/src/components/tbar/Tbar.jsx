@@ -29,6 +29,7 @@ export default function Tbar() {
   
     useEffect(() => {
       const fetchUser = async () => {
+        if (!loggedInUser || !loggedInUser._id) return;
         try {
           const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
           setUsers(response.data);
@@ -38,7 +39,8 @@ export default function Tbar() {
       };
     
       fetchUser();
-    }, []);
+    }, [loggedInUser]);
+    
 
     const toggleMenu = () => {
       setOpen((prev) => !prev);
@@ -87,7 +89,6 @@ export default function Tbar() {
       dispatch(Logout()); 
       localStorage.removeItem("user");
       navigate("/login");
-      window.location.reload();
     };
 
   return (
