@@ -46,6 +46,11 @@ export default function AdminPanel() {
         return <div>{error}</div>;
     }
 
+    const handleDeletePost = (id) => {
+        setPosts(prevPosts => prevPosts.filter(post => post._id !== id));
+    };
+    
+
     return (
         <div className="adminPanel">
             <div className="adminHeader">
@@ -56,7 +61,7 @@ export default function AdminPanel() {
             </div>
             <div className="postsContainer">
                 {posts.length > 0 ? (
-                    [...posts].reverse().map(post => <Post key={post._id} post={post} />)
+                    [...posts].reverse().map(post => <Post key={post._id} post={post} onDelete={handleDeletePost} />)
                 ) : (
                     <p>Nu sunt postări disponibile.</p>
                 )}

@@ -56,6 +56,7 @@ app.post("/api/upload",upload.single("file"),(request,response)=>{
     };
 });
 
+
 app.use(cors({
     origin: 'http://localhost:3000', 
     credentials: true

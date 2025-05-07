@@ -28,11 +28,15 @@ export default function MyProfile() {
   const params = useParams();
   const userId = params.userId || (loggedInUser ? loggedInUser._id : null);
 
+  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(`/usersRoute?userId=${userId}`);
+        setEditedDescription(response.data.description || "");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -149,6 +153,18 @@ const handleCoverImageChange = async (e) => {
     }
   };
   
+  const handleDescription = async () => {
+    try {
+      const res = await axios.put(`/usersRoute/updateDescription/${user._id}`, {
+        description: editedDescription,
+      });
+      setUsers((prev) => ({ ...prev, description: res.data.description }));
+      setIsEditingDesc(false);
+    } catch (error) {
+      console.error("Failed to update description:", error);
+      alert("A apărut o eroare. Încearcă din nou.");
+    }
+  };
   
 
 
@@ -164,16 +180,20 @@ const handleCoverImageChange = async (e) => {
                 src={user.coverImage ? FLDR + user.coverImage : "/assets/posts/defaultCoverImage.png"}
                 alt=""
               />
-              <input
-                type="file"
-                style={{ display: 'none' }}
-                onChange={handleCoverImageChange}
-                id="coverImageInput"
-              />
-              <WallpaperIcon
-                className="cornerIconCover"
-                onClick={() => document.getElementById('coverImageInput').click()}
-              />
+              {loggedInUser?._id === user._id && (
+                <>
+                  <input
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={handleCoverImageChange}
+                    id="coverImageInput"
+                  />
+                  <WallpaperIcon
+                    className="cornerIconCover"
+                    onClick={() => document.getElementById('coverImageInput').click()}
+                  />
+                </>
+              )}
           </div>
           <div className="myProfileContainer">
             <div className="imageWrapper">
@@ -182,16 +202,20 @@ const handleCoverImageChange = async (e) => {
                 src={user.profileImage ? FLDR + user.profileImage : "/assets/users/defaultProfileImage.png"}
                 alt=""
               />
-              <input
-                type="file"
-                style={{ display: 'none' }}
-                onChange={handleProfileImageChange}
-                id="profileImageInput"
-              />
-              <WallpaperIcon
-                className="cornerIcon"
-                onClick={() => document.getElementById('profileImageInput').click()}
-              />
+            {loggedInUser?._id === user._id && (
+              <>
+                <input
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={handleProfileImageChange}
+                  id="profileImageInput"
+                />
+                <WallpaperIcon
+                  className="cornerIcon"
+                  onClick={() => document.getElementById('profileImageInput').click()}
+                />
+              </>
+            )}
           </div>
             <span className="myName">{user.lastname} {user.firstname}</span>
           </div>
@@ -212,11 +236,28 @@ const handleCoverImageChange = async (e) => {
           <div className="descriptionMyProfile">
             <div className="upDescription">
               <span className='title'>Descriere</span>
-              <div className="more">
-                <MoreHorizIcon/>
-              </div>
+              {loggedInUser?._id === user._id && (
+                <div className="more">
+                  <MoreHorizIcon onClick={() => setIsEditingDesc(!isEditingDesc)} />
+                </div>
+              )}
             </div>
-            <span className='text'>{user.description}</span>
+            {isEditingDesc ? (
+            <div className="editDescArea">
+              <div className="textAreaWrapper">
+                  <textarea
+                    className="descriptionTextarea"
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                    rows={3}
+                  />
+              </div>
+              <button className="saveDescriptionBtn" onClick={handleDescription}>Salvează</button>
+            </div>
+          ) : (
+            <span className='text'>{user.description || "Fără descriere momentan."}</span>
+          )}
+
           </div>
 
           <div className="oldPhotosContainer">

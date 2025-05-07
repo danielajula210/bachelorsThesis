@@ -101,3 +101,26 @@
 .rightUpPart{
     cursor: pointer;
 }
+
+.postDropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 10;
+    padding: 5px 0;
+}
+
+.dropdownItem {
+    padding: 5px 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdownItem:hover {
+    background-color: transparent;
+}

@@ -221,6 +221,76 @@ background-color: rgba(200, 200, 200, 0.9);
     cursor: pointer;
 }
 
+.text {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.text::after {
+    font-size: 32px;
+    position: relative;
+    top: -5px;
+    right: -10px;
+    color: #ccc;
+}
+
+.editDescArea {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.textareaWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+textarea {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #fafafa;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #bf9cfc;
+}
+
+.saveDescriptionBtn {
+    padding: 4px 8px;
+    width: fit-content; 
+    background-color: #bf9cfc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 360px;
+}
+
+.saveDescriptionBtn:hover {
+    background-color: #b38afa;
+}
+
+.saveDescriptionBtn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .oldPhotosContainer {
     display: flex;
     justify-content: center;

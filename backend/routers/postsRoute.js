@@ -40,6 +40,21 @@ router.get("/foradmin", async (req, res) => {
     }
 });
 
+router.delete("/deletefromadmin/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedPost = await postModel.findByIdAndDelete(id);
+
+        if (!deletedPost) {
+            return res.status(404).json({ message: "Postarea nu a fost găsită" });
+        }
+
+        res.status(200).json({ message: "Postarea a fost ștearsă cu succes", deletedPost });
+    } catch (error) {
+        res.status(500).json({ message: "Eroare la ștergerea postării", error });
+    }
+});
+
 //get a post
 router.get("/:id",async(request,response)=>{
     try{
