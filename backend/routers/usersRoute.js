@@ -118,6 +118,7 @@ router.get("/search", async (req, res) => {
 
 const multer = require('multer');
 const path = require('path');
+const usersModel = require("../models/usersModel");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -205,5 +206,49 @@ router.put("/updateDescription/:id", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+router.get("/:userId/notifications", async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId);
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json(user.notifications);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching notifications", error: err });
+    }
+});
+
+router.post("/:userId/notifications/create", async (req, res) => {
+    const { userId, type, message, postId } = req.body;
+
+    try {
+        const user = await userModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const newNotification = {
+            type: type,
+            message: message,
+            postId: postId,
+            read: false,
+            date: new Date()
+        };
+
+        user.notifications.unshift(newNotification);
+
+        await user.save();
+
+        res.status(200).json("Notification sent successfully!");
+    } catch (err) {
+        res.status(500).json({ message: "Error sending notification", error: err });
+    }
+});
+
+
 
 module.exports = router

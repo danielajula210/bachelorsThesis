@@ -47,6 +47,26 @@ const UserSchema= new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    notifications:[
+        {
+            type: {
+                type: String, 
+                required: true
+            },
+            message: {
+                type: String,
+                required: true
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            },
+            read: {
+                type: Boolean,
+                default: false
+            }
+        }
+    ]
 },{timestamps:true});
 
 module.exports=mongoose.model("usersModel", UserSchema)

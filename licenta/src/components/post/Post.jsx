@@ -43,10 +43,21 @@ export default function Post({post,onDelete }) {
             setLike((prev) => liked ? prev - 1 : prev + 1);
     
             await axios.put(`/postsRoute/${post._id}/liking`, { userId: currentuser._id });
+    
+            if (!liked) {
+                await axios.post(`/usersRoute/${post.userId}/notifications/create`, {
+                    userId: post.userId, 
+                    type: 'like',
+                    message: `${currentuser.firstname} ți-a apreciat postarea.`,
+                    postId: post._id,
+                });
+            }
+    
         } catch (error) {
             console.error("Eroare la apreciere:", error);
         }
     };
+    
 
     useEffect(() => {
         if (Array.isArray(post.postLikes) && currentuser?._id) {
@@ -93,16 +104,25 @@ export default function Post({post,onDelete }) {
                 userId: currentuser._id,
                 lastname: `${currentuser.lastname}`,
                 firstname: `${currentuser.firstname}`,
-                profileImage:`${currentuser.profileImage}`,
+                profileImage: `${currentuser.profileImage}`,
                 text: newComment
             });
     
             setNewComment("");
-            fetchComments(); 
+            fetchComments();
+    
+            await axios.post(`/usersRoute/${post.userId}/notifications/create`, {
+                userId: post.userId, 
+                type: 'comment',
+                message: `${currentuser.firstname} a comentat la postarea ta.`,
+                postId: post._id,
+            });
+    
         } catch (err) {
             console.error("Eroare la adăugarea comentariului:", err);
         }
     };
+    
 
     const toggleComments = () => {
         if (!showComments) fetchComments();

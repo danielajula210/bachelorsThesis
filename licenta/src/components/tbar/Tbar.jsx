@@ -26,6 +26,8 @@ export default function Tbar() {
     const [showResults, setShowResults] = useState(false);
     const navigate = useNavigate();
     const { dispatch } = useContext(RegistrationContext);
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -91,6 +93,20 @@ export default function Tbar() {
       navigate("/login");
     };
 
+    useEffect(() => {
+      const fetchNotifications = async () => {
+          if (!loggedInUser || !loggedInUser._id) return;
+          try {
+              const response = await axios.get(`/usersRoute/${loggedInUser._id}/notifications`);
+              setNotifications(response.data);
+          } catch (error) {
+              console.error("Error fetching notifications:", error);
+          }
+      };
+
+      fetchNotifications();
+  }, [loggedInUser]); 
+
   return (
     <div className='tbarContainer'>
         <div className="leftTopbar">
@@ -138,11 +154,24 @@ export default function Tbar() {
               <span className="item">1</span>
             </div>
             <div className="icons">
-              <CircleNotifications/>
-              <span className="item">2</span>
+              <CircleNotifications onClick={() => setNotificationsOpen(!notificationsOpen)} />
+              <span className="item">{notifications.length}</span>
             </div>
           </div>
 
+          {notificationsOpen && (
+              <div className="notificationsDropdown">
+                  {notifications.length > 0 ? (
+                      notifications.map((notification, index) => (
+                          <div key={index} className="notificationItem">
+                              <span>{notification.message}</span>
+                          </div>
+                      ))
+                  ) : (
+                      <div>Nu ai notificări noi.</div>
+                  )}
+              </div>
+          )}
           
           <div className='moreAndProfile'>
             <Link to='/myprofile'>
@@ -166,7 +195,7 @@ export default function Tbar() {
               )}
           </div>
           </div>
-        </div>    
+        </div>   
     </div>
   )
 }
