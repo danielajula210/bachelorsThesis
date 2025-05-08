@@ -24,6 +24,11 @@ export default function Post({post,onDelete }) {
 
     const [showMenu, setShowMenu] = useState(false);
 
+    const [showComments, setShowComments] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+
+
     useEffect(()=>{
         const fetchUsers= async () =>{
             const response=await axios.get(`/usersRoute?userId=${post.userId}`);
@@ -31,17 +36,6 @@ export default function Post({post,onDelete }) {
         };
         fetchUsers();
     },[post.userId]);
-
-    const fetchUpdatedPost = async () => {
-        try {
-            const response = await axios.get(`/postsRoute/${post._id}`);
-            const updatedPost = response.data;
-            setLike(updatedPost.likes || 0);
-            setLiked(Array.isArray(updatedPost.postLikes) && updatedPost.postLikes.includes(currentuser._id));
-        } catch (err) {
-            console.error("Eroare la actualizarea postării:", err);
-        }
-    };
 
     const likesHandler = async () => {
         try {
@@ -82,7 +76,40 @@ export default function Post({post,onDelete }) {
         window.location.reload();
     };
 
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`/postsRoute/${post._id}`);
+            setComments(response.data.postComments || []);
+        } catch (err) {
+            console.error("Eroare la încărcarea comentariilor:", err);
+        }
+    };
+    
+    const handleAddComment = async () => {
+        if (newComment.trim() === "") return;
+    
+        try {
+            await axios.put(`/postsRoute/${post._id}/addComment`, {
+                userId: currentuser._id,
+                lastname: `${currentuser.lastname}`,
+                firstname: `${currentuser.firstname}`,
+                profileImage:`${currentuser.profileImage}`,
+                text: newComment
+            });
+    
+            setNewComment("");
+            fetchComments(); 
+        } catch (err) {
+            console.error("Eroare la adăugarea comentariului:", err);
+        }
+    };
 
+    const toggleComments = () => {
+        if (!showComments) fetchComments();
+        setShowComments(prev => !prev);
+    };
+    
+    
     return (
         <div className="post">
             <div className='postContainer'>
@@ -120,11 +147,47 @@ export default function Post({post,onDelete }) {
                         <span className='counter'>Apreciată de {like} persoane</span>
                     </div>
                     <div className="rightLowPart">
-                        <span className='comment'>{post.comments} Comentarii</span>
+                        <span className='comment' onClick={toggleComments} style={{ cursor: "pointer" }}>
+                            Comentarii {post.postComments.length}
+                        </span>
                     </div>
                 </div>
 
             </div>
+            {showComments && (
+                <div className="commentsSection">
+                    <div className="existingComments">
+                        {comments.length === 0 ? (
+                            <p>Nu există comentarii încă.</p>
+                        ) : (
+                            comments.map((c, index) => (
+                                <div key={index} className="commentItem">
+                                    <div className="commentHeader">
+                                        <img 
+                                            src={c.profileImage ? FLDR + c.profileImage : "/assets/users/defaultProfileImage.png"} 
+                                            alt="img" 
+                                            className="commentProfileImg"
+                                        />
+                                        <span>{c.lastname} {c.firstname}</span>
+                                    </div>
+                                    <div className="commentText">{c.text}</div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    <div className="addComment">
+                        <input
+                            type="text"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Adaugă un comentariu..."
+                        />
+                        <button onClick={handleAddComment}>Trimite</button>
+                    </div>
+                </div>
+            )}
+
         </div>
     )
 }

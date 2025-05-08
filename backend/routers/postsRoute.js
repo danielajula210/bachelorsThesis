@@ -3,7 +3,6 @@ const router=require("express").Router();
 const postModel=require("../models/postsModel")
 const userModel=require("../models/usersModel")
 
-//create post
 router.post("/",async(request,response)=>{
     const creatingPost=new postModel(request.body);
     try{
@@ -15,7 +14,6 @@ router.post("/",async(request,response)=>{
     }
 });
 
-//delete
 router.delete("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -55,7 +53,6 @@ router.delete("/deletefromadmin/:id", async (req, res) => {
     }
 });
 
-//get a post
 router.get("/:id",async(request,response)=>{
     try{
         const findPost=await postModel.findById(request.params.id);
@@ -66,7 +63,6 @@ router.get("/:id",async(request,response)=>{
     }
 });
 
-//get all posts
 router.get("/gettingposts/:userId", async (request, response) => {
     try {
         const user = await userModel.findById(request.params.userId);
@@ -82,22 +78,19 @@ router.get("/gettingposts/:userId", async (request, response) => {
 });
 
 
-
-//MyProfile posts
 router.get("/gettingprofileposts/:userId",async(request,response)=>{
     const { userId } = request.params;
     console.log("USER ID:",userId);
     try {
-      const posts = await postModel.find({ userId: userId });
-      response.json(posts);
-      console.log()
+        const posts = await postModel.find({ userId: userId });
+        response.json(posts);
+        console.log()
     } catch (err) {
-      response.status(500).send('Error fetching posts');
+        response.status(500).send('Error fetching posts');
     }
 });
 
 
-//update
 router.put("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -113,7 +106,6 @@ router.put("/:id",async(request,response)=>{
 });
 
 
-//like a post
 router.put("/:id/liking",async(request,response)=>{
     try{
         const likedPost=await postModel.findById(request.params.id);
@@ -129,7 +121,6 @@ router.put("/:id/liking",async(request,response)=>{
     }
 });
 
-//dislike a post
 router.put("/:id/disliking",async(request,response)=>{
     try{
         const dislikedPost=await postModel.findById(request.params.id);
@@ -144,6 +135,26 @@ router.put("/:id/disliking",async(request,response)=>{
         response.status(500).json(error);
     }
 });
-    
+
+router.put("/:id/addComment", async (req, res) => {
+    try {
+        const post = await postModel.findById(req.params.id);
+        const comment = {
+            userId: req.body.userId,
+            lastname:req.body.lastname,
+            firstname:req.body.firstname,
+            profileImage:req.body.profileImage,
+            text: req.body.text,
+            createdAt: new Date(),
+        };
+
+        post.postComments.push(comment);
+        await post.save();
+
+        res.status(200).json(post.postComments);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 module.exports=router;

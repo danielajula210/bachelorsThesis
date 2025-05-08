@@ -20,6 +20,10 @@ const PostSchema= new mongoose.Schema({
         type:Array,
         default:[]
     },
+    postComments:{
+        type:Array,
+        default:[]
+    },
 },{timestamps:true});
 
 module.exports=mongoose.model("postsModel", PostSchema)

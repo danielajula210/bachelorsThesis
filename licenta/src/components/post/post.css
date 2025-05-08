@@ -124,3 +124,55 @@
 .dropdownItem:hover {
     background-color: transparent;
 }
+
+.commentsSection {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.existingComments {
+    margin-bottom: 10px;
+}
+
+.commentItem {
+    margin-bottom: 8px;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.commentHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.commentProfileImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.addComment {
+    display: flex;
+    gap: 10px;
+}
+
+.addComment input {
+    flex: 1;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.addComment button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
