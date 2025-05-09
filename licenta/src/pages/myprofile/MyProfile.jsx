@@ -166,8 +166,6 @@ const handleCoverImageChange = async (e) => {
     }
   };
   
-
-
   return (
     <>
     <div className="tBar"><Tbar/></div>

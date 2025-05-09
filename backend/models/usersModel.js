@@ -66,7 +66,11 @@ const UserSchema= new mongoose.Schema({
                 default: false
             }
         }
-    ]
+    ],
+    friendRequests: { 
+        type: [String], 
+        default: [] 
+    }
 },{timestamps:true});
 
 module.exports=mongoose.model("usersModel", UserSchema)

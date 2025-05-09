@@ -28,6 +28,7 @@ export default function Tbar() {
     const { dispatch } = useContext(RegistrationContext);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [showSettings, setShowSettings] = useState(false);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -35,6 +36,13 @@ export default function Tbar() {
         try {
           const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
           setUsers(response.data);
+          setFormData({
+            firstname: response.data.firstname || '',
+            lastname: response.data.lastname || '',
+            email: response.data.email || '',
+            password: '',
+            birthdate: response.data.birthdate?.split("T")[0] || ''
+          });
         } catch (error) {
           console.error("Error fetching user:", error);
         }
@@ -107,7 +115,43 @@ export default function Tbar() {
       fetchNotifications();
   }, [loggedInUser]); 
 
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    birthdate: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSettingsSave = async () => {
+    try {
+      const dataToSend = {
+        ...formData,
+        userId: loggedInUser._id
+      };
+  
+      if (!formData.password) {
+        delete dataToSend.password;
+      }
+  
+      await axios.put(`/usersRoute/${loggedInUser._id}`, dataToSend);
+      alert("Setările au fost actualizate cu succes!");
+      setShowSettings(false); 
+      window.location.reload();
+    } catch (error) {
+      console.error("Eroare la actualizarea setărilor:", error);
+      alert("Eroare la actualizare!");
+    }
+  };
+  
+  
   return (
+    <>
     <div className='tbarContainer'>
         <div className="leftTopbar">
           <span className="logo">VIBEZ</span>
@@ -183,7 +227,7 @@ export default function Tbar() {
               </div>
               {open && (
                 <div className="dropdownMenu">
-                  <div className="dropdownItem">
+                  <div className="dropdownItem" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon />
                     <span>Setări</span>
                   </div>
@@ -197,5 +241,30 @@ export default function Tbar() {
           </div>
         </div>   
     </div>
+
+    {showSettings && (
+      <div className="settingsPanel">
+        <h2>Actualizează date</h2>
+        <form className="settingsForm">
+          <label>Nume:
+            <input name="lastname" value={formData.lastname} onChange={handleInputChange} />
+          </label>
+          <label>Prenume:
+            <input name="firstname" value={formData.firstname} onChange={handleInputChange} />
+          </label>
+          <label>Email:
+            <input name="email" type="email" value={formData.email} onChange={handleInputChange} />
+          </label>
+          <label>Parolă:
+            <input name="password" type="password" value={formData.password} onChange={handleInputChange} />
+          </label>
+          <label>Data Nașterii:
+            <input name="birthdate" type="date" value={formData.birthdate} onChange={handleInputChange} />
+          </label>
+          <button type="button" onClick={handleSettingsSave}>Salvează</button>
+        </form>
+      </div>
+    )}
+    </>
   )
 }
