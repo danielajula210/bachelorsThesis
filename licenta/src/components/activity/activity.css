@@ -5,3 +5,10 @@
 .activityContainer{
     padding: 20px;
 }
+
+.suggestedPosts{
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #555;
+}

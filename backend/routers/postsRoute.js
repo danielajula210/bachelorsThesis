@@ -157,4 +157,55 @@ router.put("/:id/addComment", async (req, res) => {
     }
 });
 
+router.get("/suggestedposts/:userId", async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId);
+        if (!user) return res.status(404).json("User not found");
+
+        const allUsers = await userModel.find({ _id: { $ne: user._id } });
+        const userFriendIds = user.friends.map(id => id.toString());
+
+        const suggestedFriends = allUsers.filter(otherUser => {
+            const otherFriendIds = otherUser.friends.map(id => id.toString());
+            const commonFriends = otherFriendIds.filter(id => userFriendIds.includes(id));
+            return commonFriends.length > 0 && !userFriendIds.includes(otherUser._id.toString());
+        });
+
+        const suggestedFriendIds = suggestedFriends.map(u => u._id.toString());
+
+        const postsFromSuggestedFriends = await postModel.find({
+            userId: { $in: suggestedFriendIds }
+        });
+
+        const allPosts = await postModel.find();
+        const userFriendsPosts = await postModel.find({ userId: { $in: userFriendIds } });
+
+        const keywords = userFriendsPosts.flatMap(post =>
+            post.description ? post.description.toLowerCase().split(/\s+/) : []
+        );
+
+        const keywordSet = new Set(keywords);
+
+        const similarKeywordPosts = allPosts.filter(post => {
+            if (!userFriendIds.includes(post.userId.toString()) && post.description) {
+                const words = post.description.toLowerCase().split(/\s+/);
+                return words.some(word => keywordSet.has(word));
+            }
+            return false;
+        });
+
+        const allSuggestedPostsMap = new Map();
+
+        [...postsFromSuggestedFriends, ...similarKeywordPosts].forEach(post => {
+            allSuggestedPostsMap.set(post._id.toString(), post);
+        });
+
+        res.status(200).json(Array.from(allSuggestedPostsMap.values()));
+    } catch (error) {
+        console.error("Error fetching suggested posts:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 module.exports=router;
