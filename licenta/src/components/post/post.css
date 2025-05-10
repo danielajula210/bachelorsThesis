@@ -79,13 +79,6 @@
     cursor: pointer;
 }
 
-.dislike{
-    height: 24px;
-    width: 24px;
-    margin-right: 5px;
-    cursor: pointer;
-}
-
 .counter{
     font-size: 15px;
 }

@@ -81,11 +81,6 @@ export default function Postmaker() {
                 <span className='photoText'>Poză</span>
                 <input style={{display:"none"}} type="file" id="inputFile" accept=".jpeg,.png,.jpg,.gif" onChange={(e)=>setFile(e.target.files[0])}/>
               </label>
-
-              <div className="postMakerOption">
-                <InsertEmoticonIcon htmlColor='orange' className="emojiIcon"/>
-                <span className='emojiText'>Stare</span>
-              </div>
             </div>
 
         <button className='postMakerButton' type="submit">Postează</button>

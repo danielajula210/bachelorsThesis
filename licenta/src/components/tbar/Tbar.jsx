@@ -29,6 +29,7 @@ export default function Tbar() {
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [showSettings, setShowSettings] = useState(false);
+    const searchRef = useRef(null);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -81,8 +82,9 @@ export default function Tbar() {
 
       try {
           const res = await axios.get(`/usersRoute/search?query=${value}`);
-          setSearchResults(res.data); 
-          setShowResults(true);
+          const filteredResults = res.data.filter(user => !user.theAdmin);
+          setSearchResults(filteredResults); 
+          setShowResults(filteredResults.length > 0);
       } catch (err) {
           console.error("Search error:", err);
           setShowResults(false);
@@ -148,8 +150,20 @@ export default function Tbar() {
       alert("Eroare la actualizare!");
     }
   };
+
+  useEffect(() => {
+    const handleClickOutsideSearch = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
+    };
   
-  
+    document.addEventListener("mousedown", handleClickOutsideSearch);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideSearch);
+    };
+  }, []);
+    
   return (
     <>
     <div className='tbarContainer'>
@@ -166,7 +180,7 @@ export default function Tbar() {
                 />
               </div>
               {showResults && searchResults.length > 0 && (
-                <div className='searchResults'>
+                <div className='searchResults' ref={searchRef}>
                   {searchResults.map((item) => (
                     <Link
                       to={`/myprofile/${item._id}`}

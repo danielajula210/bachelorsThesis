@@ -108,7 +108,7 @@ router.get("/search", async (req, res) => {
         { firstname: { $regex: query, $options: "i" } },
         { lastname: { $regex: query, $options: "i" } }
     ]
-    }).select("_id firstname lastname profileImage");
+    }).select("_id firstname lastname profileImage theAdmin");
 
     res.status(200).json(users);
 } catch (err) {
@@ -249,8 +249,33 @@ router.post("/:userId/notifications/create", async (req, res) => {
     }
 });
 
+router.get("/suggestedFriends/:userId", async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
 
+        const userFriendIds = user.friends.map(id => id.toString());
+        const allUsers = await userModel.find({ _id: { $ne: req.params.userId } });
+        const suggested = allUsers.map(otherUser => {
+            const otherFriendIds = otherUser.friends.map(id => id.toString());
+            const commonFriends = otherFriendIds.filter(id => userFriendIds.includes(id));
+            const hasCommonFriends = commonFriends.length > 0;
+            const isNotAlreadyFriend = !userFriendIds.includes(otherUser._id.toString());
+            if (hasCommonFriends && isNotAlreadyFriend) {
+                return {
+                    ...otherUser.toObject(), 
+                    commonFriendsCount: commonFriends.length 
+                };
+            }
 
+            return null; 
+        }).filter(user => user !== null); 
 
+        res.status(200).json(suggested);
+    } catch (err) {
+        console.error("Error in suggestedFriends:", err);
+        res.status(500).json({ error: "Internal server error", details: err.message });
+    }
+});
 
 module.exports = router

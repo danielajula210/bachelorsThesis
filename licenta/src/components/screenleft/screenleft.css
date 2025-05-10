@@ -1,3 +1,51 @@
 .screenleft{
     flex: 3.5;
 }
+
+.suggestedContainer {
+    margin: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 9px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+
+.suggestedTitle {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.suggestedList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.suggestedItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.suggestedPhoto {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.suggestedName {
+font-size: 0.9rem;
+color: #333;
+font-weight: 500;
+}
+
+.commonFriendsCount {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+}
+  

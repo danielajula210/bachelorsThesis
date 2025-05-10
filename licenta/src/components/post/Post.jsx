@@ -7,7 +7,6 @@ import "./post.css"
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { RegistrationContext } from "../../context/RegistrationContext";
@@ -163,7 +162,6 @@ export default function Post({post,onDelete }) {
                 <div className="lowPart">
                     <div className="leftLowPart">
                         <FavoriteIcon htmlColor='red' className="like" onClick={likesHandler}/>
-                        <HeartBrokenIcon htmlColor='black' className="dislike"/>
                         <span className='counter'>Apreciată de {like} persoane</span>
                     </div>
                     <div className="rightLowPart">

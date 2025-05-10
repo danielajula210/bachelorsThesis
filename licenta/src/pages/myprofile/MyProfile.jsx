@@ -10,8 +10,6 @@ import { RegistrationContext } from '../../context/RegistrationContext'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
-import { CommentsDisabledOutlined } from '@mui/icons-material'
-
 
 
 export default function MyProfile() {
