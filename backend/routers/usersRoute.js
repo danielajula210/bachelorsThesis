@@ -361,8 +361,10 @@ router.get("/badges/:userId", async (req, res) => {
         if (friendsCount >= 10) badgeList.push({ name: "10 Prieteni", image: "10friends.png" });
         if (friendsCount >= 50) badgeList.push({ name: "50 de Prieteni", image: "50friends.png" });
 
+        
+        user.badges = badgeList; 
+        await user.save();
         return res.status(200).json(badgeList);
-
         
     } catch (err) {
         console.error("Eroare la calculul badge-urilor:", err);

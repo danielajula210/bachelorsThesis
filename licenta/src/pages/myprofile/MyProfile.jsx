@@ -251,7 +251,7 @@ const handleCoverImageChange = async (e) => {
           )}
           <div className="badgesSection">
             <div className="badgesHeader">
-              <span className="badgesTitle">Insignele tale</span>
+ <span className="badgesTitle">Insignele tale</span>
               <span className="seeAllBadges" onClick={() => setShowBadges(true)}>Vezi toate insignele</span>
             </div>
 
@@ -268,7 +268,7 @@ const handleCoverImageChange = async (e) => {
               )}
             </div>
           </div>
-
+          
           {showBadges && (
             <div className="popupOverlay" onClick={() => setShowBadges(false)}>
               <div className="popupContent" onClick={(e) => e.stopPropagation()}>
