@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const userModel=require("../models/usersModel");
+const postModel=require("../models/postsModel")
 const bcrypt=require("bcrypt");
 
 router.put("/:id",async(request,response)=>{
@@ -277,5 +278,99 @@ router.get("/suggestedFriends/:userId", async (req, res) => {
         res.status(500).json({ error: "Internal server error", details: err.message });
     }
 });
+
+router.get("/badges/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        if (!userId || userId === 'undefined') {
+            return res.status(400).json({ error: "UserId lipsă sau invalid." });
+        }
+
+
+        const likesReceivedAgg = await postModel.aggregate([
+        { $match: { userId: userId } },
+        { $project: { likesCount: { $size: { $ifNull: ["$postLikes", []] }} } },
+        { $group: { _id: null, totalLikes: { $sum: "$likesCount" } } }
+        ]);
+        const likesReceived = likesReceivedAgg[0]?.totalLikes || 0;
+
+        const likesGivenAgg = await postModel.aggregate([
+        { $match: { postLikes: userId } },
+        { $project: { postLikes: 1 } },
+        { $unwind: "$postLikes" },
+        { $match: { postLikes: userId } },
+        { $count: "likesGiven" }
+        ]);
+        const likesGiven = likesGivenAgg[0]?.likesGiven || 0;
+        console.log("Likes Received:", likesReceived);
+
+        const commentsReceivedAgg = await postModel.aggregate([
+        { $match: { userId: userId } },
+        { $project: { commentsCount: { $size: { $ifNull: ["$postComments", []] } } } },
+        { $group: { _id: null, totalComments: { $sum: "$commentsCount" } } }
+        ]);
+        const commentsReceived = commentsReceivedAgg[0]?.totalComments || 0;
+
+        const commentsGivenAgg = await postModel.aggregate([
+        { $unwind: "$postComments" },
+        { $match: { "postComments.userId": userId } },
+        { $count: "commentsGiven" }
+        ]);
+        const commentsGiven = commentsGivenAgg[0]?.commentsGiven || 0;
+
+        const postsCount = await postModel.countDocuments({ userId });
+        const user = await userModel.findById(userId);
+        const friendsCount = user.friends?.length || 0;
+        const birthDate = user.dateofbirth;
+        const createdAt = user.createdAt;
+
+
+        const today = new Date();
+        const isBirthday =
+        birthDate &&
+        new Date(birthDate).getDate() === today.getDate() &&
+        new Date(birthDate).getMonth() === today.getMonth();
+
+        const isChristmas = today.getDate() === 25 && today.getMonth() === 11;
+        const isEaster = false;
+
+        const badgeList = [];
+
+        badgeList.push({ name: "Bun venit!", image: "welcome.png" });
+
+        if (isBirthday) badgeList.push({ name: "La mulți ani!", image: "birthday.png" });
+        if (isChristmas) badgeList.push({ name: "Crăciun fericit!", image: "christmas.png" });
+        if (isEaster) badgeList.push({ name: "Paște fericit!", image: "easter.png" });
+
+        if (postsCount >= 1) badgeList.push({ name: "Prima postare", image: "1post.png" });
+        if (postsCount >= 5) badgeList.push({ name: "5 Postări", image: "5posts.png" });
+        if (postsCount >= 10) badgeList.push({ name: "10 Postări", image: "10posts.png" });
+        if (postsCount >= 50) badgeList.push({ name: "50 de Postări", image: "50posts.png" });
+
+        if (likesGiven >= 5) badgeList.push({ name: "5 Aprecieri date", image: "5likesgiven.png" });
+        if (likesGiven >= 10) badgeList.push({ name: "10 Aprecieri date", image: "10likesgiven.png" });
+
+        if (likesReceived >= 5) badgeList.push({ name: "5 Aprecieri primite", image: "5likesreceived.png" });
+        if (likesReceived >= 20) badgeList.push({ name: "20 Aprecieri primite", image: "20likesreceived.png" });
+
+        if (commentsGiven >= 5) badgeList.push({ name: "5 Comentarii date", image: "5commentsgiven.png" });
+        if (commentsReceived >= 10) badgeList.push({ name: "Comentarii date", image: "5commentsrecieved.png" });
+
+        if (friendsCount >= 1) badgeList.push({ name: "1 Prieten", image: "1friend.png" });
+        if (friendsCount >= 10) badgeList.push({ name: "10 Prieteni", image: "10friends.png" });
+        if (friendsCount >= 50) badgeList.push({ name: "50 de Prieteni", image: "50friends.png" });
+
+        return res.status(200).json(badgeList);
+
+        
+    } catch (err) {
+        console.error("Eroare la calculul badge-urilor:", err);
+        return res.status(500).json({ error: "Eroare la obținerea badge-urilor." });
+    }
+
+});
+
+
 
 module.exports = router

@@ -29,6 +29,9 @@ export default function MyProfile() {
   const [isEditingDesc, setIsEditingDesc] = useState(false);
   const [editedDescription, setEditedDescription] = useState("");
 
+  const [badges, setBadges]= useState([]);
+  const [showBadges, setShowBadges] = useState(false);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -163,6 +166,23 @@ const handleCoverImageChange = async (e) => {
       alert("A apărut o eroare. Încearcă din nou.");
     }
   };
+
+  useEffect(() => {
+    if (!user._id) return;
+    const fetchBadges = async () => {
+      try {
+        const res = await axios.get(`/usersRoute/badges/${user._id}`);
+        setBadges(res.data);
+      } catch (err) {
+        console.error("Eroare la preluarea badge-urilor:", err);
+      }
+    };
+  
+    fetchBadges();
+  }, [user._id]);
+  
+
+
   
   return (
     <>
@@ -229,6 +249,42 @@ const handleCoverImageChange = async (e) => {
               {friend ? "Nu mai urmări" : "Urmărește"}
             </button>
           )}
+          <div className="badgesSection">
+            <div className="badgesHeader">
+              <span className="badgesTitle">Insignele tale</span>
+              <span className="seeAllBadges" onClick={() => setShowBadges(true)}>Vezi toate insignele</span>
+            </div>
+
+            <div className="badgesContainer">
+              {badges.length > 0 ? (
+                badges.slice().reverse().slice(0, 3).map((badge, index) => (
+                  <div className="badgeItem" key={index}>
+                    <img src={FLDR + badge.image} alt={badge.name} className="badgeImage" />
+                    <span className="badgeName">{badge.name}</span>
+                  </div>
+                ))
+              ) : (
+                <span className="noBadges">Nu ai insigne momentan.</span>
+              )}
+            </div>
+          </div>
+
+          {showBadges && (
+            <div className="popupOverlay" onClick={() => setShowBadges(false)}>
+              <div className="popupContent" onClick={(e) => e.stopPropagation()}>
+                <h2>Toate insignele</h2>
+                <div className="badgesContainer">
+                  {badges.slice().reverse().map((badge, index) => (
+                    <div className="badgeItem" key={index}>
+                      <img src={FLDR + badge.image} alt={badge.name} className="badgeImage" />
+                      <span className="badgeName">{badge.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="descriptionMyProfile">
             <div className="upDescription">
               <span className='title'>Descriere</span>

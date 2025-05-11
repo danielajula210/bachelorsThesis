@@ -70,7 +70,13 @@ const UserSchema= new mongoose.Schema({
     friendRequests: { 
         type: [String], 
         default: [] 
-    }
+    },
+    badges: [
+        {
+        name: String,
+        image: String
+        }
+    ],
 },{timestamps:true});
 
 module.exports=mongoose.model("usersModel", UserSchema)
