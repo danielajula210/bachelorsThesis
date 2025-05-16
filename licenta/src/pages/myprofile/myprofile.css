@@ -174,6 +174,7 @@ background-color: rgba(200, 200, 200, 0.9);
     margin-right: 0.625rem;
     margin-top: 0.625rem;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .friendPhoto {
@@ -187,8 +188,13 @@ background-color: rgba(200, 200, 200, 0.9);
     margin-top: 0.125rem;
     font-size: 0.875rem;
     color: #333;
-    margin-left: 1.0625rem;
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    width: 100%;
+    text-align: center; 
 }
+
 
 .descriptionMyProfile {
     display: flex;
@@ -388,6 +394,54 @@ textarea:focus {
     cursor: pointer;
 }
 
+.popupPost {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.popupContent.allPostsPopup {
+    max-height: 90vh;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 80%;
+    overflow-y: auto;
+}
+
+.allPostsInPopup {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.postInPopup .post {
+    transform: scale(0.9);
+    transform-origin: top center;
+}
+
+.postInPopup .post .photo {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.postInPopup .post .counter{
+    font-size: 13px;
+}
+
+.postInPopup .post .comments{
+    font-size: 12px;
+}
+
+
 @keyframes bounce {
     0%, 100% {
         transform: translateY(0);
@@ -471,6 +525,71 @@ textarea:focus {
     text-align: center;
 }
 
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.popupContent {
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    margin: 5% auto;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.friendsPopup input {
+    width: 98%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.allFriendsContainer {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.friendsListInPopup {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.friendItemInPopup {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.friendPhotoPopup {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.friendNamePopup{
+    font-size: 14px;
+    color: #333;
+}
+
+.noFriends {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+}
 
 @media (max-width: 768px) {
     .upperProfile {

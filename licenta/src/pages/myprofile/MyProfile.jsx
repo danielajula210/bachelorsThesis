@@ -1,6 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router'
+import {Link} from 'react-router-dom'
 
 import "./myprofile.css"
 
@@ -18,7 +19,7 @@ export default function MyProfile() {
   const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
-  const [friend, setFriend] = useState(false);
+ const [friend, setFriend] = useState(false);
 
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -33,21 +34,22 @@ export default function MyProfile() {
   const [showBadges, setShowBadges] = useState(false);
 
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`/usersRoute?userId=${userId}`);
-        setEditedDescription(response.data.description || "");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        alert("Failed to load user data. Please try again later.");
-      }
-    };
-  
-    fetchUser();
-  }, []);
-  
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`/usersRoute?userId=${userId}`);
+      setEditedDescription(response.data.description || "");
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      alert("Failed to load user data. Please try again later.");
+    }
+  };
+
+  if (userId) fetchUser();
+}, [userId]); 
+
+
   useEffect(() => {
     if (user._id) {  
       const fetchMyPosts = async () => {
@@ -64,12 +66,11 @@ export default function MyProfile() {
     }
   }, [user && user._id]);
 
-  useEffect(() => {
-    if (loggedInUser && user?._id) {
-      setFriend(loggedInUser.friends?.includes(user._id));
-    }
-  }, [loggedInUser, user]);
-  
+useEffect(() => {
+  if (!loggedInUser || !loggedInUser.friends || !user._id) return;
+  setFriend(loggedInUser.friends.includes(user._id));
+}, [loggedInUser, user._id]);
+
 
   useEffect(() => {
     if (user._id) {
@@ -88,7 +89,9 @@ export default function MyProfile() {
 
   console.log(loggedInUser);
 
-  const handleClick = async () => {
+  console.log("USER ID: ",userId);
+  console.log("FRIEND STATE: ",loggedInUser.friends?.includes(userId));
+const handleClick = async () => {
     if (!loggedInUser || !user?._id) return;
     try {
       if (friend) {
@@ -103,6 +106,7 @@ export default function MyProfile() {
       console.log(error);
     }
   };
+
 
 
 const handleCoverImageChange = async (e) => {
@@ -181,9 +185,24 @@ const handleCoverImageChange = async (e) => {
     fetchBadges();
   }, [user._id]);
   
+  const [showAllPosts, setShowAllPosts] = useState(false);
+
+  const [showFriendsPopup, setShowFriendsPopup] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredFriends = friends.filter(friend => 
+    `${friend.firstname} ${friend.lastname}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
 
-  
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const toggleFriendsPopup = () => {
+    setShowFriendsPopup(!showFriendsPopup);
+  };
+
   return (
     <>
     <div className="tBar"><Tbar/></div>
@@ -251,7 +270,9 @@ const handleCoverImageChange = async (e) => {
           )}
           <div className="badgesSection">
             <div className="badgesHeader">
- <span className="badgesTitle">Insignele tale</span>
+              <span className="badgesTitle">
+                {loggedInUser?._id === user._id ? "Insignele tale" : "Insigne"}
+              </span>
               <span className="seeAllBadges" onClick={() => setShowBadges(true)}>Vezi toate insignele</span>
             </div>
 
@@ -314,8 +335,10 @@ const handleCoverImageChange = async (e) => {
 
           <div className="oldPhotosContainer">
             <div className="upperOldPhotosContainer">
-              <span className='oldtitle'>Postările tale</span>
-              <span className='seeAllOldPosts'>Vezi toate postările </span>
+              <span className='oldtitle'>
+              {loggedInUser?._id === user._id ? "Postările tale" : "Postări"}
+              </span>
+              <span className='seeAllOldPosts' onClick={() => setShowAllPosts(true)}>Vezi toate postările</span>
               <span className='allOldPostNumber'>{myPosts.filter(post => post.postImage).length}</span>
             </div>
 
@@ -334,23 +357,72 @@ const handleCoverImageChange = async (e) => {
 
           </div>
 
+          {showAllPosts && (
+            <div className="popupPost" onClick={() => setShowAllPosts(false)}>
+              <div className="popupContent allPostsPopup" onClick={(e) => e.stopPropagation()}>
+                <h2>Toate postările</h2>
+                <div className="allPostsInPopup">
+                  {myPosts.slice().reverse().map((p) => (
+                    <div className="postInPopup" key={p._id}>
+                      <Post post={p} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="friendsList">
             <div className="upFriendsList">
-              <span className='allFriends'>Lista ta de prieteni</span>
-              <span className='seeAllFriends'>Vezi intreaga listă </span>
+              <span className='allFriends'>
+                {loggedInUser?._id === user._id ? "Lista ta de prieteni" : "Lista de prieteni"}
+              </span>
+              <span className='seeAllFriends'onClick={toggleFriendsPopup}>Vezi intreaga listă </span>
               <span className='allFriendsNumber'>{friends.length}</span>
             </div>
             
             <div className="lowFriendsList">
                 {friends.slice(0, 3).map((friend) => (
-                  <div className="friends" key={friend._id}>
-                    <img src={friend.profileImage ? FLDR+friend.profileImage : "/assets/users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
-                    <span className="friendName">{friend.lastname} {friend.firstname}</span>
-                  </div>
+                <Link to={`/myprofile/${friend._id}`}  className="friends" key={friend._id}>
+                  <img src={friend.profileImage ? FLDR + friend.profileImage : "/assets/users/defaultProfileImage.png"} className='friendPhoto' alt="img" />
+                  <span className="friendName">{friend.lastname} {friend.firstname}</span>
+                </Link>
                 ))}
             </div>
 
           </div>
+          {showFriendsPopup && (
+            <div className="popupOverlay" onClick={toggleFriendsPopup}>
+              <div className="popupContent friendsPopup" onClick={(e) => e.stopPropagation()}>
+                <h2>Toți prietenii</h2>
+                <input 
+                  type="text" 
+                  placeholder="Căutare prieteni..." 
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="searchFriendsInput"
+                />
+                <div className="allFriendsContainer">
+                  {filteredFriends.length > 0 ? (
+                    <div className="friendsListInPopup">
+                      {filteredFriends.map(friend => (
+                        <Link to={`/myprofile/${friend._id}`} key={friend._id} className="friendItemInPopup" onClick={() => setShowFriendsPopup(false)}>
+                          <img 
+                            src={friend.profileImage ? FLDR + friend.profileImage : "/assets/users/defaultProfileImage.png"} 
+                            className="friendPhotoPopup" 
+                            alt="img" 
+                          />
+                          <span className="friendNamePopup">{friend.lastname} {friend.firstname}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="noFriends">Nu ai prieteni care se potrivesc cu această căutare.</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>

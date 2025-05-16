@@ -26,6 +26,24 @@
     margin-top: 2rem;
 }
 
+.postsContainer .post .photo{
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.postsContainer .post {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.postsContainer .post .description{
+    font-size: 15px;
+}
+
 .postsContainer > p {
     text-align: center;
     grid-column: 1 / -1;
@@ -45,8 +63,6 @@
     color: #3498db;
     background-color: #eaf2f8;
 }
-
-
 
 .logoutButton {
     padding: 6px 12px;
