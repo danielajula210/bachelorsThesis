@@ -86,18 +86,6 @@
     background-color: #00b140;
 }
 
-.forgotPassword {
-    text-align: center;
-    color: #00da4c;
-    font-size: 14px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.forgotPassword:hover {
-    color: #00b140;
-}
-
 .newAccount {
     height: 50px;
     width: 60%;

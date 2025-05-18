@@ -68,6 +68,38 @@ router.put("/:id/friends",async(request, response)=>{
     }
 });
 
+router.put("/:id/follow",async(request, response)=>{
+    try{
+        const friend1=await userModel.findById(request.params.id);
+        const friend2=await userModel.findById(request.body.userId);
+        if(!friend2.friends.includes(request.params.id)){
+            await friend1.updateOne({$push:{followers:request.body.userId}});
+            await friend2.updateOne({$push:{friends:request.params.id}});
+            response.status(200).json("you are friends now");
+        }else{
+            response.status(403).json("Already friends");
+        }
+    }catch(error){
+        response.status(500).json(error);
+    }
+});
+
+router.put("/:id/unfollow",async(request, response)=>{
+    try{
+        const friend1=await userModel.findById(request.params.id);
+        const friend2=await userModel.findById(request.body.userId);
+        if(friend2.friends.includes(request.params.id)){
+            await friend1.updateOne({$pull:{followers:request.body.userId}});
+            await friend2.updateOne({$pull:{friends:request.params.id}});
+            response.status(200).json("You aren't friends anymore");
+        }else{
+            response.status(403).json("Already unfriend");
+        }
+    }catch(error){
+        response.status(500).json(error);
+    }
+});
+
 router.put("/:id/unfriend",async(request, response)=>{
     try{
         const friend1=await userModel.findById(request.params.id);
@@ -95,6 +127,23 @@ router.get("/getFriends/:userId", async (req, res) => {
         const friends = await userModel.find({ _id: { $in: user.friends } }).select("firstname lastname profileImage");
     
         res.status(200).json(friends);
+    } catch (error) {
+        console.error("Error fetching friends:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.get("/getFollowers/:userId", async (req, res) => {
+    try {
+        const user = await userModel.findById(req.params.userId);
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const followers = await userModel.find({ _id: { $in: user.followers } }).select("firstname lastname profileImage");
+    
+        res.status(200).json(followers);
     } catch (error) {
         console.error("Error fetching friends:", error);
         res.status(500).json({ message: "Server error" });

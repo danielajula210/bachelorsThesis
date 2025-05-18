@@ -19,7 +19,7 @@ export default function MyProfile() {
   const {user:loggedInUser,dispatch}= useContext(RegistrationContext);
   const [myPosts, setMyPosts] = useState([]); 
   const [friends, setFriends] = useState([]);
- const [friend, setFriend] = useState(false);
+  const [friend, setFriend] = useState(false);
 
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -95,10 +95,10 @@ const handleClick = async () => {
     if (!loggedInUser || !user?._id) return;
     try {
       if (friend) {
-        await axios.put("/usersRoute/"+user._id+"/unfriend", {userId: loggedInUser._id});
+        await axios.put("/usersRoute/"+user._id+"/unfollow", {userId: loggedInUser._id});
         dispatch({type: "UNFRIEND", payload: user._id});
       } else {
-        await axios.put("/usersRoute/"+user._id+"/friends", {userId: loggedInUser._id});
+        await axios.put("/usersRoute/"+user._id+"/follow", {userId: loggedInUser._id});
         dispatch({type: "FRIEND", payload: user._id});
       }
       setFriend(!friend);
@@ -202,6 +202,25 @@ const handleCoverImageChange = async (e) => {
   const toggleFriendsPopup = () => {
     setShowFriendsPopup(!showFriendsPopup);
   };
+
+  const [followers,setFollowers] = useState([]);
+
+  useEffect(() => {
+  if (user._id) {
+    const fetchFollowers = async () => {
+      try {
+        const res = await axios.get(`/usersRoute/getFollowers/${user._id}`);
+        setFollowers(res.data);
+      } catch (err) {
+        console.error("Eroare la preluarea urmăritorilor:", err);
+      }
+    };
+
+    fetchFollowers();
+  }
+  }, [user._id]);
+
+
 
   return (
     <>
@@ -375,7 +394,7 @@ const handleCoverImageChange = async (e) => {
           <div className="friendsList">
             <div className="upFriendsList">
               <span className='allFriends'>
-                {loggedInUser?._id === user._id ? "Lista ta de prieteni" : "Lista de prieteni"}
+                {loggedInUser?._id === user._id ? "Lista ta de urmăriri" : "Lista de urmăriri"}
               </span>
               <span className='seeAllFriends'onClick={toggleFriendsPopup}>Vezi intreaga listă </span>
               <span className='allFriendsNumber'>{friends.length}</span>
@@ -388,8 +407,7 @@ const handleCoverImageChange = async (e) => {
                   <span className="friendName">{friend.lastname} {friend.firstname}</span>
                 </Link>
                 ))}
-            </div>
-
+            </div>  
           </div>
           {showFriendsPopup && (
             <div className="popupOverlay" onClick={toggleFriendsPopup}>
@@ -423,8 +441,25 @@ const handleCoverImageChange = async (e) => {
               </div>
             </div>
           )}
+          <div className="followersList">
+            <div className="upFollowersList">
+              <span className='allFollowers'>
+                {loggedInUser?._id === user._id ? "Lista ta de urmăritori" : "Lista de urmăritori"}
+              </span>
+              <span className='seeAllFollowers'onClick={toggleFriendsPopup}>Vezi intreaga listă </span>
+              <span className='allFollowersNumber'>{followers.length}</span>
+            </div>
+            
+            <div className="lowFollowersList">
+                {followers.slice(0, 3).map((follower) => (
+                <Link to={`/myprofile/${follower._id}`}  className="followers" key={follower._id}>
+                  <img src={follower.profileImage ? FLDR + follower.profileImage : "/assets/users/defaultProfileImage.png"} className='followerPhoto' alt="img" />
+                  <span className="followerName">{follower.lastname} {follower.firstname}</span>
+                </Link>
+                ))}
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
     </>

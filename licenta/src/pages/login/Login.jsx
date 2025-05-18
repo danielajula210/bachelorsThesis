@@ -32,7 +32,6 @@ export default function Login() {
                         <input placeholder="Introdu adresa de email" type="email" required className="email" ref={email}></input>
                         <input placeholder="Introdu parola" type="password" required minLength="8" className="pass" ref={password}></input>
                         <button className="buttonLogin">{isFetching? <CircularProgress color="inherit"/> :"Conectează-te"}</button>
-                        <span className='forgotPassword'>Ai uitat parola?</span>
                         <Link to="/registration" className='registrationLink'><button className="newAccount">Crează un cont nou</button></Link>
                     </form>
                 </div>
