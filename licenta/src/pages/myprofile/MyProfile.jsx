@@ -67,8 +67,8 @@ useEffect(() => {
   }, [user && user._id]);
 
 useEffect(() => {
-  if (!loggedInUser || !loggedInUser.friends || !user._id) return;
-  setFriend(loggedInUser.friends.includes(user._id));
+  if (!loggedInUser?.friends || !user._id) return;
+  setFriend(loggedInUser?.friends?.includes(user._id));
 }, [loggedInUser, user._id]);
 
 
@@ -90,7 +90,7 @@ useEffect(() => {
   console.log(loggedInUser);
 
   console.log("USER ID: ",userId);
-  console.log("FRIEND STATE: ",loggedInUser.friends?.includes(userId));
+  console.log("FRIEND STATE: ",loggedInUser?.friends?.includes(userId));
 const handleClick = async () => {
     if (!loggedInUser || !user?._id) return;
     try {
@@ -204,6 +204,10 @@ const handleCoverImageChange = async (e) => {
   };
 
   const [followers,setFollowers] = useState([]);
+  const [showFollowersPopup, setShowFollowersPopup] = useState(false);
+    const toggleFollowersPopup = () => {
+    setShowFollowersPopup(!showFollowersPopup);
+  };
 
   useEffect(() => {
   if (user._id) {
@@ -412,10 +416,10 @@ const handleCoverImageChange = async (e) => {
           {showFriendsPopup && (
             <div className="popupOverlay" onClick={toggleFriendsPopup}>
               <div className="popupContent friendsPopup" onClick={(e) => e.stopPropagation()}>
-                <h2>Toți prietenii</h2>
+                <h2>Toate urmăririle</h2>
                 <input 
                   type="text" 
-                  placeholder="Căutare prieteni..." 
+                  placeholder="Căutare urmăriri..." 
                   value={searchTerm}
                   onChange={handleSearchChange}
                   className="searchFriendsInput"
@@ -446,7 +450,7 @@ const handleCoverImageChange = async (e) => {
               <span className='allFollowers'>
                 {loggedInUser?._id === user._id ? "Lista ta de urmăritori" : "Lista de urmăritori"}
               </span>
-              <span className='seeAllFollowers'onClick={toggleFriendsPopup}>Vezi intreaga listă </span>
+              <span className='seeAllFollowers'onClick={toggleFollowersPopup}>Vezi intreaga listă </span>
               <span className='allFollowersNumber'>{followers.length}</span>
             </div>
             
@@ -459,6 +463,37 @@ const handleCoverImageChange = async (e) => {
                 ))}
             </div>
           </div>
+          {showFollowersPopup && (
+            <div className="popupOverlay" onClick={toggleFollowersPopup}>
+              <div className="popupContent followersPopup" onClick={(e) => e.stopPropagation()}>
+                <h2>Toți urmăritorii</h2>
+                <div className="allFollowersContainer">
+                  {followers.length > 0 ? (
+                    <div className="followersListInPopup">
+                      {followers.map(follower => (
+                        <Link
+                          to={`/myprofile/${follower._id}`}
+                          key={follower._id}
+                          className="followerItemInPopup"
+                          onClick={() => setShowFollowersPopup(false)}
+                        >
+                          <img
+                            src={follower.profileImage ? FLDR + follower.profileImage : "/assets/users/defaultProfileImage.png"}
+                            className="followerPhotoPopup"
+                            alt="img"
+                          />
+                          <span className="followerNamePopup">{follower.lastname} {follower.firstname}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="noFollowers">Nu ai urmăritori momentan.</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

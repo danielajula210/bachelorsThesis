@@ -208,10 +208,6 @@ export default function Tbar() {
           </Link>
           <div className="iconList">
             <div className="icons">
-              <Person/>
-              <span className="item">1</span>
-            </div>
-            <div className="icons">
               <CircleNotifications onClick={() => setNotificationsOpen(!notificationsOpen)} />
               <span className="item">{notifications.length}</span>
             </div>

@@ -29,7 +29,7 @@ export default function Screenleft() {
   return (
     <div className='screenleft'>
       <div className="suggestedContainer">
-        <span className="suggestedTitle">Prieteni sugerați</span>
+        <span className="suggestedTitle">Persoane sugerate</span>
         <div className="suggestedList">
           {suggestedFriends.slice(0, 5).map((friend) => (
             <div className="suggestedItem" key={friend._id}>
