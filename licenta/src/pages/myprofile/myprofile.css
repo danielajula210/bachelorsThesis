@@ -546,7 +546,7 @@ textarea:focus {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.friendsPopup input {
+.friendsPopup input, .followersPopup input {
     width: 98%;
     padding: 10px;
     margin-bottom: 15px;

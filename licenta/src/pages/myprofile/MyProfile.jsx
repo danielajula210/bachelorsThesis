@@ -224,6 +224,18 @@ const handleCoverImageChange = async (e) => {
   }
   }, [user._id]);
 
+  const [searchFollowers, setSearchFollowers] = useState("");
+  const filteredFollowers = followers.filter(follower => 
+  `${follower.firstname} ${follower.lastname}`.toLowerCase().includes(searchFollowers.toLowerCase())
+  );
+
+  const handleSearchFollowersChange = (e) => {
+    setSearchFollowers(e.target.value);
+  };
+
+
+
+
 
 
   return (
@@ -467,10 +479,17 @@ const handleCoverImageChange = async (e) => {
             <div className="popupOverlay" onClick={toggleFollowersPopup}>
               <div className="popupContent followersPopup" onClick={(e) => e.stopPropagation()}>
                 <h2>Toți urmăritorii</h2>
+                <input
+                  type="text"
+                  placeholder="Căutare urmăritori..."
+                  value={searchFollowers}
+                  onChange={handleSearchFollowersChange}
+                  className="searchFollowersInput"
+                />
                 <div className="allFollowersContainer">
-                  {followers.length > 0 ? (
+                  {filteredFollowers.length > 0 ? (
                     <div className="followersListInPopup">
-                      {followers.map(follower => (
+                      {filteredFollowers.map(follower => (
                         <Link
                           to={`/myprofile/${follower._id}`}
                           key={follower._id}
@@ -487,10 +506,11 @@ const handleCoverImageChange = async (e) => {
                       ))}
                     </div>
                   ) : (
-                    <span className="noFollowers">Nu ai urmăritori momentan.</span>
+                    <span className="noFollowers">Nu ai urmăritori care se potrivesc cu această căutare.</span>
                   )}
                 </div>
               </div>
+
             </div>
           )}
 

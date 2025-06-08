@@ -29,8 +29,39 @@ export default function Postmaker() {
     fetchUser();
   }, []);
 
+  const prohibitedPatterns = [
+      /https?:\/\/\S+/gi,
+      /www\.\S+/gi,
+      /\.(com|ro|net|info|biz|xyz|top|online|click|link)/gi,
+      /\b(socant|viral|bomba|link|incredibil|uimitor|senzational|uluitor|exploziv|nu vei crede|in sfarsit|adevarul despre|rusinos|cutremurator|scandalos|interzis|click aici|vezi acum|distribuie rapid|share|like|da mai departe|nu ignora|citeste pana la capat|medicii ascund|secret guvernamental|s-a aflat|in premiera|exclusiv|dezvaluire|castiga bani rapid|lucreaza de acasa|gratis|100% garantat|fara efort|truc simplu|pastile minune|detoxifiere|slabesti|bitcoin|investitie sigura)\b/gi,
+      /\d{10,}/gi
+  ];
+
+  function removeDiacritics(str) {
+      return str
+          .replace(/ș|ş|Ș|Ş/g, 's')
+          .replace(/ț|ţ|Ț|Ţ/g, 't')
+          .replace(/ă|Ă/g, 'a')
+          .replace(/â|Â/g, 'a')
+          .replace(/î|Î/g, 'i');
+  }
+
+  function containsProhibitedContent(text) {
+      const cleanText = removeDiacritics(text.toLowerCase());
+      return prohibitedPatterns.some(pattern => pattern.test(cleanText));
+  }
+
+
   const handleSubmit= async (e)=>{
     e.preventDefault();
+
+    const postDescription = description.current.value;
+
+    if (containsProhibitedContent(postDescription)) {
+        alert("Postarea conține linkuri sau cuvinte interzise. Te rugăm să editezi descrierea.");
+        return;
+    }
+
     const newPost={
       userId:user._id,
       postDescription: description.current.value

@@ -3,14 +3,41 @@ const router=require("express").Router();
 const postModel=require("../models/postsModel")
 const userModel=require("../models/usersModel")
 
+
+const prohibitedPatterns = [
+    /https?:\/\/\S+/gi,
+    /www\.\S+/gi,
+    /\.(com|ro|net|info|biz|xyz|top|online|click|link)/gi,
+    /\b(socant|viral|bomba|link|incredibil|uimitor|senzational|uluitor|exploziv|nu vei crede|in sfarsit|adevarul despre|rusinos|cutremurator|scandalos|interzis|click aici|vezi acum|distribuie rapid|share|like|da mai departe|nu ignora|citeste pana la capat|medicii ascund|secret guvernamental|s-a aflat|in premiera|exclusiv|dezvaluire|castiga bani rapid|lucreaza de acasa|gratis|100% garantat|fara efort|truc simplu|pastile minune|detoxifiere|slabesti|bitcoin|investitie sigura)\b/gi,
+    /\d{10,}/gi
+];
+
+function removeDiacritics(str) {
+    return str
+        .replace(/ș|ş|Ș|Ş/g, 's')
+        .replace(/ț|ţ|Ț|Ţ/g, 't')
+        .replace(/ă|Ă/g, 'a')
+        .replace(/â|Â/g, 'a')
+        .replace(/î|Î/g, 'i');
+}
+
+function containsProhibitedContent(text) {
+    const cleanText = removeDiacritics(text.toLowerCase());
+    return prohibitedPatterns.some(pattern => pattern.test(cleanText));
+}
+
+
 router.post("/",async(request,response)=>{
     const creatingPost=new postModel(request.body);
-    try{
-        const savingPost=await creatingPost.save();
-        response.status(200).json(savingPost)
+    if (containsProhibitedContent(creatingPost.postDescription)) {
+        return response.status(400).json({ message: "Postarea conține conținut interzis (linkuri, fake news etc)." });
+    }
 
-    }catch(error){
-        response.status(500).json(error)
+    try {
+        const savingPost = await creatingPost.save();
+        response.status(200).json(savingPost);
+    } catch (error) {
+        response.status(500).json(error);
     }
 });
 
@@ -206,6 +233,9 @@ router.get("/suggestedposts/:userId", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+
 
 
 module.exports=router;
