@@ -21,15 +21,17 @@ export default function MyProfile() {
   const [friends, setFriends] = useState([]);
   const [friend, setFriend] = useState(false);
 
-  const [coverImageFile, setCoverImageFile] = useState(null);
-  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null);//Se utilizeaza pentru editarea pozei de coperta
+  const [profileImageFile, setProfileImageFile] = useState(null);//Se utilizeaza pentru editarea pozei de profil
   
-  const params = useParams();
+  const params = useParams();//Se utilizeaza  pentru a extrage parametrii din URL, pentru navigarea facila intre profilurile utilizatorilor
   const userId = params.userId || (loggedInUser ? loggedInUser._id : null);
 
-  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const [isEditingDesc, setIsEditingDesc] = useState(false);//Se utilizeaza pentru editarea descrierii
   const [editedDescription, setEditedDescription] = useState("");
 
+
+  //Se utilizeaza pentru panoul de insigne
   const [badges, setBadges]= useState([]);
   const [showBadges, setShowBadges] = useState(false);
 
@@ -91,6 +93,8 @@ useEffect(() => {
 
   console.log("USER ID: ",userId);
   console.log("FRIEND STATE: ",loggedInUser?.friends?.includes(userId));
+
+  //Functie care gestioneaza functionalitatea de urmarire
 const handleClick = async () => {
     if (!loggedInUser || !user?._id) return;
     try {
@@ -108,7 +112,7 @@ const handleClick = async () => {
   };
 
 
-
+//Functie care gestioneaza actualizarea pozei de coperta
 const handleCoverImageChange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -133,7 +137,7 @@ const handleCoverImageChange = async (e) => {
   }
 };
   
-
+//Functie care gestioneaza actualizarea pozei de coperta
   const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -158,6 +162,7 @@ const handleCoverImageChange = async (e) => {
     }
   };
   
+  //Functie care gestioneaza actualizarea descrierii
   const handleDescription = async () => {
     try {
       const res = await axios.put(`/usersRoute/updateDescription/${user._id}`, {
@@ -171,6 +176,8 @@ const handleCoverImageChange = async (e) => {
     }
   };
 
+
+  //Functie care gestioneaza aparitia insignelor
   useEffect(() => {
     if (!user._id) return;
     const fetchBadges = async () => {
@@ -199,6 +206,7 @@ const handleCoverImageChange = async (e) => {
     setSearchTerm(e.target.value);
   };
 
+  //Functie care comuta sectiunea de vizlizare integrala a listei de urmaritori
   const toggleFriendsPopup = () => {
     setShowFriendsPopup(!showFriendsPopup);
   };
@@ -209,6 +217,7 @@ const handleCoverImageChange = async (e) => {
     setShowFollowersPopup(!showFollowersPopup);
   };
 
+  //Functie care preia datele urmaritorilor
   useEffect(() => {
   if (user._id) {
     const fetchFollowers = async () => {
@@ -223,7 +232,7 @@ const handleCoverImageChange = async (e) => {
     fetchFollowers();
   }
   }, [user._id]);
-
+  
   const [searchFollowers, setSearchFollowers] = useState("");
   const filteredFollowers = followers.filter(follower => 
   `${follower.firstname} ${follower.lastname}`.toLowerCase().includes(searchFollowers.toLowerCase())

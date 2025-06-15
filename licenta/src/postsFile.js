@@ -143,3 +143,4 @@ export const MyPosts=[
         mycomments:17,
     },
 ];
+//Fisierul cu dummyData folosit inainte de conectarea bazei de date

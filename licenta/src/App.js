@@ -10,7 +10,7 @@ import AdminPanel from './pages/admin/AdminPanel.jsx';
 import {RegistrationContext} from "./context/RegistrationContext.js"
 
 
-
+//Aici se creaza rutele de navigare intre componente
 function App() {
   const {user}=useContext(RegistrationContext);
   return(

@@ -21,14 +21,14 @@ export default function Tbar() {
     const [user,setUsers]=useState({});
     const {user:loggedInUser}= useContext(RegistrationContext);
     const menuRef = useRef(null);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");//Utilizat pentru inputu-ul barei de căutare
     const [searchResults, setSearchResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const navigate = useNavigate();
-    const { dispatch } = useContext(RegistrationContext);
-    const [notificationsOpen, setNotificationsOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-    const [showSettings, setShowSettings] = useState(false);
+    const { dispatch } = useContext(RegistrationContext);//Pentru a prelua starea exacta a utilizatorului
+    const [notificationsOpen, setNotificationsOpen] = useState(false);//Uilizat pentru a da toggle notificarilor
+    const [notifications, setNotifications] = useState([]);//Utilizate ptrnu gestionarea notificărilor
+    const [showSettings, setShowSettings] = useState(false);//Utilizate pentru afișarea setărilor
     const searchRef = useRef(null);
   
     useEffect(() => {
@@ -37,6 +37,7 @@ export default function Tbar() {
         try {
           const response = await axios.get(`/usersRoute?userId=${loggedInUser._id}`);
           setUsers(response.data);
+          //Datele necesare in formularul care permite actualizarea datelor personale
           setFormData({
             firstname: response.data.firstname || '',
             lastname: response.data.lastname || '',
@@ -71,6 +72,7 @@ export default function Tbar() {
     }, [menuRef]);
 
     
+    //Functia care se ocupă de afisarea utilizatorilor in bara de cautare
     const handleSearchChange = async (e) => {
       const value = e.target.value;
       setSearchTerm(value);
@@ -96,6 +98,7 @@ export default function Tbar() {
         setSearchTerm("");
     };
 
+    //Functia care se ocupa de deconectarea utilizatorului
     const handleLogout = (e) => {
       e?.preventDefault?.();
       dispatch(Logout()); 
@@ -103,6 +106,7 @@ export default function Tbar() {
       navigate("/login");
     };
 
+    //Se preiuau notificarile utilizatorului pentru a fi afisate
     useEffect(() => {
       const fetchNotifications = async () => {
           if (!loggedInUser || !loggedInUser._id) return;
@@ -130,6 +134,7 @@ export default function Tbar() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  //Functie care salveaza datele actualizate ale utilizatorului
   const handleSettingsSave = async () => {
     try {
       const dataToSend = {
@@ -151,6 +156,7 @@ export default function Tbar() {
     }
   };
 
+
   useEffect(() => {
     const handleClickOutsideSearch = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -170,6 +176,7 @@ export default function Tbar() {
         <div className="leftTopbar">
           <span className="logo">VIBEZ</span>
             <div className='searchBarContainer'>
+              {/*Secțiunea pentru bara de căutare */}
               <div className="searchBar">
                 <Search className='searchIcon'/>
                 <input
@@ -183,7 +190,7 @@ export default function Tbar() {
                 <div className='searchResults' ref={searchRef}>
                   {searchResults.map((item) => (
                     <Link
-                      to={`/myprofile/${item._id}`}
+                      to={`/myprofile/${item._id}`}//Dacă se apasă pe poza sau pe numele utilizatorului, se navigheaza pe profilul acestuia
                       className="searchResultItem"
                       key={item._id}
                       onClick={handleResultClick}
@@ -204,11 +211,11 @@ export default function Tbar() {
 
         <div className="rightTopbar">
           <Link to="/"> 
-            <HomeIcon className="homeLink"/>
+            <HomeIcon className="homeLink"/>{/*Inconita de home, care duce la fluxul de activitate*/}
           </Link>
           <div className="iconList">
             <div className="icons">
-              <CircleNotifications onClick={() => setNotificationsOpen(!notificationsOpen)} />
+              <CircleNotifications onClick={() => setNotificationsOpen(!notificationsOpen)} />{/*Inconita pentru notificări*/}
               <span className="item">{notifications.length}</span>
             </div>
           </div>
@@ -227,6 +234,7 @@ export default function Tbar() {
               </div>
           )}
           
+          {/*Sectiunea de unde se pot accesa setările și butonul de deconectare*/}
           <div className='moreAndProfile'>
             <Link to='/myprofile'>
                 <img src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"} alt="" className="profileImg" />
@@ -252,6 +260,7 @@ export default function Tbar() {
         </div>   
     </div>
 
+    {/*Secțiunea cu formularul care permite actualizarea datelor*/}
     {showSettings && (
       <div className="settingsPanel">
         <h2>Actualizează date</h2>

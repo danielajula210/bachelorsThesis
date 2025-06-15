@@ -1,3 +1,5 @@
+// Sistemul de acțiuni Redux folosit pentru a gestiona starea aplicației
+
 export const LoginStart = (loginInfo) => ({
     type: "LOGIN_START",
 });

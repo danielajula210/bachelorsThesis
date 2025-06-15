@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+ //Reptrezinta o funcție asincronă care face un apel către un API pentru a autentifica un utilizator si folosește dispatch pentru a actualiza starea aplicației (
 export const loginCall = async (userCredentials,dispatch)=>{
     dispatch({type:"LOGIN_START"});
     try{

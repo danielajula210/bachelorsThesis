@@ -1,21 +1,27 @@
-import React, {useEffect,useState, useContext, useRef } from 'react';
+import React, {useEffect,useState, useContext, useRef } from 'react';  //Se importa React, hook-urile de baza si contextul pentru utilizatorul curent
 import axios from 'axios'
 
-import "./postmaker.css"
-import { RegistrationContext } from '../../context/RegistrationContext';
+import "./postmaker.css"//Se importa css-ul corespunzător pentru stilizare
+import { RegistrationContext } from '../../context/RegistrationContext';//Se utilizeaza pentru starea globală a utilizatorului
 
+//Se importa librarii externe pentru iconitele folosite
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 
 export default function Postmaker() {
-  const FLDR = process.env.REACT_APP_POSTS_FOLDER;
+  const FLDR = process.env.REACT_APP_POSTS_FOLDER;//Reprezinta locul unde se salveaza imaginile pe serverul local
+
+  // State pentru datele utilizatorului, fisierul selectat si contextul user-ului logat
   const [user,setUsers]=useState({});
   const {user:loggedInUser}= useContext(RegistrationContext);
-  const description = useRef();
-  const [file,setFile] = useState(null);
 
+  // Referinta pentru campul de descriere
+  const description = useRef();
+  const [file,setFile] = useState(null);//Utilizat pentru imaginea atasata
+
+
+   // La montarea componentei, preluam datele utilizatorului
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -29,6 +35,7 @@ export default function Postmaker() {
     fetchUser();
   }, []);
 
+  //Expresii regulate pentru detectarea continutului interzis
   const prohibitedPatterns = [
       /https?:\/\/\S+/gi,
       /www\.\S+/gi,
@@ -37,6 +44,7 @@ export default function Postmaker() {
       /\d{10,}/gi
   ];
 
+  //Functie pentru eliminarea diacriticelor din textul scris
   function removeDiacritics(str) {
       return str
           .replace(/ș|ş|Ș|Ş/g, 's')
@@ -46,27 +54,31 @@ export default function Postmaker() {
           .replace(/î|Î/g, 'i');
   }
 
+  //Verifica daca textul contine continut interzis
   function containsProhibitedContent(text) {
       const cleanText = removeDiacritics(text.toLowerCase());
       return prohibitedPatterns.some(pattern => pattern.test(cleanText));
   }
 
-
+  //Functia pentru trimiterea postarii
   const handleSubmit= async (e)=>{
     e.preventDefault();
 
     const postDescription = description.current.value;
 
+    //Validăm conținutul textului
     if (containsProhibitedContent(postDescription)) {
         alert("Postarea conține linkuri sau cuvinte interzise. Te rugăm să editezi descrierea.");
         return;
     }
 
+    // Cream un obiect de tip newPost
     const newPost={
       userId:user._id,
       postDescription: description.current.value
     }
 
+     //Dacă este atasat un fișier, il incarcam pe server
     if(file){
       const formData=new FormData();
       const filename= file.name;
@@ -75,7 +87,7 @@ export default function Postmaker() {
       formData.append("name", filename);
       newPost.postImage=filename;
       try{
-        await axios.post("/upload",formData,);
+        await axios.post("/upload",formData,);// Trimitem cererea de tip POST către backend
       }catch(error){
         console.log(error);
       }
@@ -92,18 +104,21 @@ export default function Postmaker() {
     <div className='postMaker'>
       <div className="postMakerContainer">
 
+        {/* Secțiunea de creare a unei postări */}
         <div className="upperPart">
           <img className="postMakerProfileImg" src={user.profileImage ? FLDR+user.profileImage : "/assets/users/defaultProfileImage.png"}  alt="img" />
           <input placeholder={"Ce ai dori să distribui astăzi, "+ user.firstname+"?" }className='text' ref={description}/>
         </div>
 
         <hr className="downpartSeparater"/>
+        {/* Afișăm preview-ul imaginii daca a fost selectata */}
         {file && (
           <div className="postingContainer">
             <img  src={URL.createObjectURL(file)} className="postingImage" ></img>
             <CancelIcon className="postCancel" onClick={()=>setFile(null)}/>
           </div>
         )}
+        {/* Formularul pentru crearea postării */}
         <form className="downPart" onSubmit={handleSubmit}>
             <div className="postingMakerOptions">
               

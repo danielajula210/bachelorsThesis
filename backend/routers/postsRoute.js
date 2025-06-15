@@ -4,6 +4,7 @@ const postModel=require("../models/postsModel")
 const userModel=require("../models/usersModel")
 
 
+//Expresiile regulate care sunt interzise din descrirea postarii
 const prohibitedPatterns = [
     /https?:\/\/\S+/gi,
     /www\.\S+/gi,
@@ -12,6 +13,7 @@ const prohibitedPatterns = [
     /\d{10,}/gi
 ];
 
+//Se elimina diacriticele din text
 function removeDiacritics(str) {
     return str
         .replace(/ș|ş|Ș|Ş/g, 's')
@@ -21,12 +23,13 @@ function removeDiacritics(str) {
         .replace(/î|Î/g, 'i');
 }
 
+//Se valideaza dscrierea
 function containsProhibitedContent(text) {
     const cleanText = removeDiacritics(text.toLowerCase());
     return prohibitedPatterns.some(pattern => pattern.test(cleanText));
 }
 
-
+//Ruta pentru crearea unei postări
 router.post("/",async(request,response)=>{
     const creatingPost=new postModel(request.body);
     if (containsProhibitedContent(creatingPost.postDescription)) {
@@ -41,6 +44,7 @@ router.post("/",async(request,response)=>{
     }
 });
 
+//Ruta pentru ștergerea unei postari
 router.delete("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -55,7 +59,7 @@ router.delete("/:id",async(request,response)=>{
     }
 });
 
-
+//Ruta pentru optinerea postarilor pentru panoul de admin
 router.get("/foradmin", async (req, res) => {
     try {
         const allPosts = await postModel.find();
@@ -65,6 +69,7 @@ router.get("/foradmin", async (req, res) => {
     }
 });
 
+//Ruta pentru stergerea postarilor din panoul de admin
 router.delete("/deletefromadmin/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -80,6 +85,7 @@ router.delete("/deletefromadmin/:id", async (req, res) => {
     }
 });
 
+//Se returneaza o postare dupa id
 router.get("/:id",async(request,response)=>{
     try{
         const findPost=await postModel.findById(request.params.id);
@@ -90,6 +96,7 @@ router.get("/:id",async(request,response)=>{
     }
 });
 
+//Returnează postarilor persoanelor urmarite de catre un utilizator
 router.get("/gettingposts/:userId", async (request, response) => {
     try {
         const user = await userModel.findById(request.params.userId);
@@ -104,7 +111,7 @@ router.get("/gettingposts/:userId", async (request, response) => {
     }
 });
 
-
+//Se returneeaza postarile utilizatorului
 router.get("/gettingprofileposts/:userId",async(request,response)=>{
     const { userId } = request.params;
     console.log("USER ID:",userId);
@@ -117,7 +124,7 @@ router.get("/gettingprofileposts/:userId",async(request,response)=>{
     }
 });
 
-
+//Se poate actualiza postarea
 router.put("/:id",async(request,response)=>{
     try{
         const findPhoto= await postModel.findById(request.params.id);
@@ -132,7 +139,7 @@ router.put("/:id",async(request,response)=>{
     } 
 });
 
-
+//Permite aprecierea posatrilor
 router.put("/:id/liking",async(request,response)=>{
     try{
         const likedPost=await postModel.findById(request.params.id);
@@ -148,21 +155,8 @@ router.put("/:id/liking",async(request,response)=>{
     }
 });
 
-router.put("/:id/disliking",async(request,response)=>{
-    try{
-        const dislikedPost=await postModel.findById(request.params.id);
-        if(!dislikedPost.postDislikes.includes(request.body.userId)){
-            await dislikedPost.updateOne({ $push: {postDislikes: request.body.userid}});
-            response.status(200).json("Successfuly disliked");
-        }else{
-            await dislikedPost.updateOne({$pull:{postDislikes:request.body.userId}});
-            response.status(200).json("Taken dislike back");
-        }
-    }catch(error){
-        response.status(500).json(error);
-    }
-});
 
+//Permite adaugarea de comentarii
 router.put("/:id/addComment", async (req, res) => {
     try {
         const post = await postModel.findById(req.params.id);
@@ -184,6 +178,7 @@ router.put("/:id/addComment", async (req, res) => {
     }
 });
 
+//Returneaza postarile sugerate
 router.get("/suggestedposts/:userId", async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId);
@@ -200,21 +195,26 @@ router.get("/suggestedposts/:userId", async (req, res) => {
 
         const suggestedFriendIds = suggestedFriends.map(u => u._id.toString());
 
-        const postsFromSuggestedFriends = await postModel.find({
-            userId: { $in: suggestedFriendIds }
-        });
+        const userPosts = await postModel.find({ userId: user._id.toString() });
 
-        const allPosts = await postModel.find();
-        const userFriendsPosts = await postModel.find({ userId: { $in: userFriendIds } });
-
-        const keywords = userFriendsPosts.flatMap(post =>
+        const keywords = userPosts.flatMap(post =>
             post.description ? post.description.toLowerCase().split(/\s+/) : []
         );
 
         const keywordSet = new Set(keywords);
 
-        const similarKeywordPosts = allPosts.filter(post => {
-            if (!userFriendIds.includes(post.userId.toString()) && post.description) {
+        const postsFromSuggestedFriends = await postModel.find({
+            userId: { $in: suggestedFriendIds }
+        });
+
+        const outsiderIds = allUsers
+            .filter(u => !userFriendIds.includes(u._id.toString()) && !suggestedFriendIds.includes(u._id.toString()))
+            .map(u => u._id.toString());
+
+        const outsiderPosts = await postModel.find({ userId: { $in: outsiderIds } });
+
+        const similarKeywordPosts = outsiderPosts.filter(post => {
+            if (post.description) {
                 const words = post.description.toLowerCase().split(/\s+/);
                 return words.some(word => keywordSet.has(word));
             }
@@ -233,6 +233,7 @@ router.get("/suggestedposts/:userId", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 
 

@@ -30,6 +30,7 @@ async function connectDB() {
 }
 
 connectDB();
+//Precesul de stocare al imaginilor
 
 app.use("/photos",express.static(path.join(__dirname,"/public/photos")));
 

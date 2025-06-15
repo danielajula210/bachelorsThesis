@@ -17,6 +17,7 @@ export default function Registration() {
     const password = useRef();
     const password2 = useRef();
 
+    //Functie care se ocupa de trimiterea formularului de inregistrare
     const handleClick = async (error)=>{
         error.preventDefault();
         if(password2.current.value !== password.current.value){

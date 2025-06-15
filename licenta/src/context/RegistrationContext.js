@@ -1,6 +1,8 @@
 import {createContext,useReducer} from 'react';
 import RegistrationReducer from './RegistrationReducer';
 
+//Se tulizează pentru gestionarea starii globale ale utilizatorului
+
 const INITIAL_STATE = {
     user: JSON.parse(localStorage.getItem("user")) || null,
     isFetching: false,

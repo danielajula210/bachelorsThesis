@@ -1,3 +1,5 @@
+//Se foloseste pentru controlul si actualizarea stării globale 
+
 const RegistrationReducer = (state, action) => {
     switch(action.type){
         case "LOGIN_START":

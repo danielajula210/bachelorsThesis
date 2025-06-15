@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+//Defineste schema pentru postari
 const PostSchema= new mongoose.Schema({
     userId:{
         required:true,

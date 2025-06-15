@@ -8,11 +8,11 @@ import Screenright from '../../components/screenright/Screenright'
 export default function Home() {
   return (
     <>
-      <Tbar/>
+      <Tbar/>{/*Afiseaza componenta Tbar */}
       <div className="homeContainer">
-        <Screenleft/>
-        <Activity/>
-        <Screenright/>
+        <Screenleft/>{/*Afiseaza componenta ScreenLeft */}
+        <Activity/>{/*Afiseaza componenta Activity */}
+        <Screenright/>{/*Afiseaza componenta Screenright */}
       </div>
     </>
   )

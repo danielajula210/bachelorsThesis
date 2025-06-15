@@ -6,13 +6,14 @@ import "./login.css"
 import {loginCall} from "../../apiCalls"
 import {RegistrationContext} from "../../context/RegistrationContext";
 
-import {CircularProgress} from "@mui/material"
+import {CircularProgress} from "@mui/material"//Inconita pentru incarcarea conectarii
 
 export default function Login() {
     const email = useRef();
     const password = useRef();
     const {user, isFetching, error, dispatch}=useContext(RegistrationContext);
 
+    //Se ocupa de gestionarea conectarii utilizatorului
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -28,6 +29,7 @@ export default function Login() {
                     <span className="message">Fii pregătit să împărtășești doar gânduri pozitive!</span>
                 </div>
                 <div className="lowLogin">
+                    {/*Formularul cu datele necesare conectarii*/}
                     <form className="loginProcess" onSubmit={handleSubmit}>
                         <input placeholder="Introdu adresa de email" type="email" required className="email" ref={email}></input>
                         <input placeholder="Introdu parola" type="password" required minLength="8" className="pass" ref={password}></input>

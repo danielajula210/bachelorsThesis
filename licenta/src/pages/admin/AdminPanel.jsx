@@ -15,6 +15,7 @@ export default function AdminPanel() {
     const navigate = useNavigate();
     const { dispatch } = useContext(RegistrationContext);
 
+    // La montarea componentei se preiuau toate postarile utilizatorilor
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -46,6 +47,7 @@ export default function AdminPanel() {
         return <div>{error}</div>;
     }
 
+    //Functie care gestioneaza stergerea postarilor
     const handleDeletePost = (id) => {
         setPosts(prevPosts => prevPosts.filter(post => post._id !== id));
     };

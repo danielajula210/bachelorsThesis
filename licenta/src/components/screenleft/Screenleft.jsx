@@ -12,7 +12,7 @@ export default function Screenleft() {
   const [suggestedFriends, setSuggestedFriends] = useState([]);
 
 
-  useEffect(() => {
+  useEffect(() => {//Se preiau datele legate de persoanele sugerate
     const fetchSuggested = async () => {
       try {
         const res = await axios.get(`/usersRoute/suggestedFriends/${loggedInUser._id}`);

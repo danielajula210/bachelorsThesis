@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+//Defineste schema pentru useri
 const UserSchema= new mongoose.Schema({
     lastname:{
         type: String,

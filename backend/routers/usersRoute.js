@@ -3,6 +3,8 @@ const userModel=require("../models/usersModel");
 const postModel=require("../models/postsModel")
 const bcrypt=require("bcrypt");
 
+
+//Permite actualizarea datelor utilizatorului
 router.put("/:id",async(request,response)=>{
     if(request.body.userId === request.params.id || request.body.theAdmin){
         if(request.body.password){
@@ -24,6 +26,8 @@ router.put("/:id",async(request,response)=>{
     }
 });
 
+
+//Permite stergerea unui utilizator
 router.delete("/:id",async(request,response)=>{
     if(request.body.userId === request.params.id || request.body.theAdmin){
         try{
@@ -37,6 +41,7 @@ router.delete("/:id",async(request,response)=>{
     }
 });
 
+//Returneaza utilizatorul dupa id
 router.get("/",async(request,response)=>{
     const userId = request.query.userId;
     const lastName = request.query.lastName;
@@ -51,6 +56,7 @@ router.get("/",async(request,response)=>{
         return response.status(500).json(error);
     }
 });
+
 
 router.put("/:id/friends",async(request, response)=>{
     try{
@@ -68,6 +74,7 @@ router.put("/:id/friends",async(request, response)=>{
     }
 });
 
+//Gestioneaza urmaririle
 router.put("/:id/follow",async(request, response)=>{
     try{
         const friend1=await userModel.findById(request.params.id);
@@ -84,6 +91,7 @@ router.put("/:id/follow",async(request, response)=>{
     }
 });
 
+//Gestioneaza urmaririle
 router.put("/:id/unfollow",async(request, response)=>{
     try{
         const friend1=await userModel.findById(request.params.id);
@@ -116,6 +124,7 @@ router.put("/:id/unfriend",async(request, response)=>{
     }
 });
 
+//Returneaza persoanele urmarite ale utilizatorului
 router.get("/getFriends/:userId", async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId);
@@ -133,6 +142,7 @@ router.get("/getFriends/:userId", async (req, res) => {
     }
 });
 
+//Returneaza urmaritorii utilizatorului
 router.get("/getFollowers/:userId", async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId);
@@ -150,6 +160,7 @@ router.get("/getFollowers/:userId", async (req, res) => {
     }
 });
 
+//Returneaza rezultatele barei de cautare
 router.get("/search", async (req, res) => {
     const query = req.query.query;
     try {
@@ -166,6 +177,8 @@ router.get("/search", async (req, res) => {
 }
 });
 
+
+//Procesul de stocare al imaginilor pentru imagini de profil si coperta
 const multer = require('multer');
 const path = require('path');
 const usersModel = require("../models/usersModel");
@@ -181,6 +194,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+//permite actualizarea pozei de coperta
 router.put("/:id/updateCoverImage", upload.single('file'), async (req, res) => {
     try {
     const coverImage = req.file ? `${req.file.filename}` : null; 
@@ -206,6 +220,7 @@ router.put("/:id/updateCoverImage", upload.single('file'), async (req, res) => {
     }
 });
 
+//Permite actualizarea pozei de profil
 router.put("/:id/updateProfileImage",upload.single('file'), async (req, res) => {
     try {
         const profileImage = req.file ? `${req.file.filename}` : null; 
@@ -231,6 +246,8 @@ router.put("/:id/updateProfileImage",upload.single('file'), async (req, res) => 
         }
 });
 
+
+//Permite editarea descrierii
 router.put("/updateDescription/:id", async (req, res) => {
     const userId = req.params.id;
     const { description } = req.body;
@@ -257,6 +274,7 @@ router.put("/updateDescription/:id", async (req, res) => {
     }
 });
 
+//Returneaza notificarile utilizatorului
 router.get("/:userId/notifications", async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId);
@@ -271,6 +289,7 @@ router.get("/:userId/notifications", async (req, res) => {
     }
 });
 
+//Permite crearea notificarilor
 router.post("/:userId/notifications/create", async (req, res) => {
     const { userId, type, message, postId } = req.body;
 
@@ -299,6 +318,7 @@ router.post("/:userId/notifications/create", async (req, res) => {
     }
 });
 
+//Returneaza utilizatorii sugerati
 router.get("/suggestedFriends/:userId", async (req, res) => {
     try {
         const user = await userModel.findById(req.params.userId);
@@ -328,6 +348,8 @@ router.get("/suggestedFriends/:userId", async (req, res) => {
     }
 });
 
+
+//Returneaza insginele utilizatorului
 router.get("/badges/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;

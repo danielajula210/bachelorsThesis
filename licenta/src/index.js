@@ -12,4 +12,5 @@ root.render(
 
   </React.StrictMode>
 );
+//Reprezinta punctul de intrare al aplicatiei
 

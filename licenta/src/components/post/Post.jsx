@@ -1,33 +1,36 @@
-import React, { useState, useEffect,useContext } from "react";
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect,useContext } from "react"; //Se importa React, hook-urile de baza si contextul pentru utilizatorul curent
+import {Link} from 'react-router-dom'//Se importa pentru navigare, routing intre pagini
 import axios from 'axios'
-import {format} from "timeago.js"
+import {format} from "timeago.js" //Se importa pentru afiaarea timpului relativ
 
-import "./post.css"
+import "./post.css"//Se importa css-ul corespunzător pentru stilizare
 
+//Se importa librarii externe pentru iconitele folosite
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { RegistrationContext } from "../../context/RegistrationContext";
+import { RegistrationContext } from "../../context/RegistrationContext";//Se utilizeaza pentru starea globală a utilizatorului
 
 
 export default function Post({post,onDelete }) {
-    const FLDR = process.env.REACT_APP_POSTS_FOLDER;
+    const FLDR = process.env.REACT_APP_POSTS_FOLDER; //Reprezinta locul unde se salveaza imaginile pe serverul local
 
+    // Se creeaza 2 stari like, liked si 2 funcții setLike si setLiked care se ocupă de gestionarea aprecierilor 
     const [like,setLike]=useState(Number(post.likes) || 0);
     const [liked,setLiked]=useState(false);
 
-    const [user,setUsers]=useState({});
-    const {user:currentuser}=useContext(RegistrationContext)
+    const [user,setUsers]=useState({});   // Datele autorului postării
+    const {user:currentuser}=useContext(RegistrationContext)// Extragem utilizatorul curent din context
 
-    const [showMenu, setShowMenu] = useState(false);
+    const [showMenu, setShowMenu] = useState(false); // Gestionarea meniului dropdown pentru setări
 
+    // Gestionarea comentariilor (afișare și adăugare)
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
 
-
+    // Când componenta se încarcă sau când se schimbă userId-ul postării, se incarcă datele autorului
     useEffect(()=>{
         const fetchUsers= async () =>{
             const response=await axios.get(`/usersRoute?userId=${post.userId}`);
@@ -36,13 +39,15 @@ export default function Post({post,onDelete }) {
         fetchUsers();
     },[post.userId]);
 
+    // Gestionarea aprecierilor
     const likesHandler = async () => {
         try {
             setLiked((prev) => !prev);
-            setLike((prev) => liked ? prev - 1 : prev + 1);
+            setLike((prev) => liked ? prev - 1 : prev + 1);// Incrementeaza/decrementeaza aprecierilor
     
-            await axios.put(`/postsRoute/${post._id}/liking`, { userId: currentuser._id });
+            await axios.put(`/postsRoute/${post._id}/liking`, { userId: currentuser._id });// Trimite cererea HTTP către backend
     
+            // Daca e un like nou, trimite notificare
             if (!liked) {
                 await axios.post(`/usersRoute/${post.userId}/notifications/create`, {
                     userId: post.userId, 
@@ -58,6 +63,7 @@ export default function Post({post,onDelete }) {
     };
     
 
+     // La reincarcarea paginii se verifica daca postarea e deja apreciata si cate aprecieri are
     useEffect(() => {
         if (Array.isArray(post.postLikes) && currentuser?._id) {
             setLiked(post.postLikes.includes(currentuser._id));
@@ -70,6 +76,7 @@ export default function Post({post,onDelete }) {
     
     console.log("Post primit:", post);
 
+    // Funcție pentru stergerea postarii
     const handleDelete = async () => {
         try {
             if (currentuser.theAdmin) {
@@ -86,6 +93,7 @@ export default function Post({post,onDelete }) {
         window.location.reload();
     };
 
+    // Se preiau comentariile pentru postare
     const fetchComments = async () => {
         try {
             const response = await axios.get(`/postsRoute/${post._id}`);
@@ -95,6 +103,7 @@ export default function Post({post,onDelete }) {
         }
     };
     
+    //Functie pentru adăugarea de comentarii
     const handleAddComment = async () => {
         if (newComment.trim() === "") return;
     
@@ -110,6 +119,7 @@ export default function Post({post,onDelete }) {
             setNewComment("");
             fetchComments();
     
+            // Trimite notificare autorului postării
             await axios.post(`/usersRoute/${post.userId}/notifications/create`, {
                 userId: post.userId, 
                 type: 'comment',
@@ -122,7 +132,7 @@ export default function Post({post,onDelete }) {
         }
     };
     
-
+    // Afișează sau ascunde comentariile
     const toggleComments = () => {
         if (!showComments) fetchComments();
         setShowComments(prev => !prev);
@@ -153,7 +163,6 @@ export default function Post({post,onDelete }) {
                         )}
                     </div>
                 </div>
-
                 <div className="middlePart">
                     <span className='description'>{post?.postDescription}</span>
                     <img className="photo"src={FLDR+post.postImage} alt="img" />
@@ -172,6 +181,7 @@ export default function Post({post,onDelete }) {
                 </div>
 
             </div>
+            {/* Secțiunea de comentarii */}
             {showComments && (
                 <div className="commentsSection">
                     <div className="existingComments">
@@ -194,6 +204,7 @@ export default function Post({post,onDelete }) {
                         )}
                     </div>
 
+                    {/* Secțiunea pentru adaugare de comentarii */}
                     <div className="addComment">
                         <input
                             type="text"

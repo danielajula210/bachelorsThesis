@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const userModel=require("../models/usersModel");
-const hiddenpassword= require("bcrypt");
+const hiddenpassword= require("bcrypt");//Utilizat pentru criptarea parolei
 const bcrypt=require("bcrypt")
 
+//Ruta pentru conectare
 router.post("/login", async (request, response)=>{
     try {
         const foundUser = await userModel.findOne({ email: request.body.email });
@@ -19,6 +20,7 @@ router.post("/login", async (request, response)=>{
     }
 });
 
+//Ruta pentru inregistrare
 router.post("/register", async(request,response)=>{
     try{
         const factor=10;
