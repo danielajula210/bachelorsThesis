@@ -95,6 +95,8 @@ export default function Postmaker() {
 
     try{
       await axios.post("/postsRoute",newPost);
+      description.current.value = "";
+      setFile(null);
     }catch(error){
       console.log(error);
     }

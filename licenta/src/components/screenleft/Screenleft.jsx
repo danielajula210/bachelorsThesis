@@ -45,8 +45,8 @@ export default function Screenleft() {
               </Link>
               <span className="commonFriendsCount">
                 {friend.commonFriendsCount > 0
-                  ? `prieteni comuni: ${friend.commonFriendsCount}`
-                  : 'Fără prieteni comuni'}
+                  ? `Urmăriri comune: ${friend.commonFriendsCount}`
+                  : 'Fără urmăriri comune'}
               </span>
             </div>
           ))}
